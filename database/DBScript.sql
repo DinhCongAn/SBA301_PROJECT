@@ -2,19 +2,19 @@
 GO
 
 -- ❌ Xoá database cũ nếu đã tồn tại để tạo mới lại từ đầu
-IF EXISTS (SELECT name FROM sys.databases WHERE name = 'PhoneShopDB')
+IF EXISTS (SELECT name FROM sys.databases WHERE name = 'MiniMartDB')
 BEGIN
-    ALTER DATABASE PhoneShopDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-    DROP DATABASE PhoneShopDB;
+    ALTER DATABASE MiniMartDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE MiniMartDB;
 END;
 GO
 
 -- ✅ Tạo mới cơ sở dữ liệu
-CREATE DATABASE PhoneShopDB;
+CREATE DATABASE MiniMartDB;
 GO
 
 -- ✅ Sử dụng database vừa tạo
-USE PhoneShopDB;
+USE MiniMartDB;
 GO
 
 --------------------------------------------------------------------------------
@@ -313,4 +313,4 @@ GO
 --------------------------------------------------------------------------------
 -- ✅ THÔNG BÁO HOÀN TẤT
 --------------------------------------------------------------------------------
-PRINT '✅ Cơ sở dữ liệu PhoneShopDB và tất cả các bảng đã được tạo thành công.';
+PRINT 'Database MiniMartDB created successfully.';
