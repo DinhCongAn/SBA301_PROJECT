@@ -11,8 +11,8 @@ This project is a full-stack web application developed for the SBA301 course.
 
 ## Main Features
 - User authentication and authorization
-- CRUD Student
-- View student list
+- CRUD product
+- View product list
 - Role-based access control
 
 ## How to Run Project
@@ -21,3 +21,4 @@ This project is a full-stack web application developed for the SBA301 course.
 ```bash
 cd backend
 mvn spring-boot:run
+
