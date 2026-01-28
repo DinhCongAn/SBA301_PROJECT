@@ -313,4 +313,4 @@ GO
 --------------------------------------------------------------------------------
 -- ✅ THÔNG BÁO HOÀN TẤT
 --------------------------------------------------------------------------------
-PRINT 'Database MiniMartDB created successfully.';
+PRINT N'✅ Database MiniMartDB created successfully.';

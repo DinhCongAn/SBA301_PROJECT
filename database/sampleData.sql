@@ -1,4 +1,4 @@
-﻿  USE PhoneShopDB;
+﻿  USE MiniMartDB;
 GO
 
 -- Xóa dữ liệu cũ trong các bảng có khóa ngoại để tránh xung đột và chèn lại
@@ -377,4 +377,4 @@ INSERT INTO Sliders (image_url, link_url, title, description, status, order_numb
 (N'https://macone.vn/wp-content/uploads/2024/09/Apple-MacBook-Air-2-up-hero-240304.jpg', N'https://macone.vn/macbook-air-m3/?srsltid=AfmBOopQJWxt_M3csS4ZvDgU0jCBRQwUn12qc6FoO94uZ3GZXtW6z-zL', N'MacBook Air M3', N'Hiệu năng mạnh mẽ, thiết kế siêu mỏng nhẹ.', N'active', 5);
 GO
 
-PRINT N'✅ Dữ liệu mẫu mới đã được chèn thành công vào PhoneShopDB với khoảng 20 dòng mỗi bảng.';
+PRINT N'✅ Dữ liệu mẫu mới đã được chèn thành công vào MiniMartDB với khoảng 20 dòng mỗi bảng.';
