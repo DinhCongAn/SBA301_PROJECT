@@ -43,7 +43,7 @@ function ProductList() {
                 <td>{p.id}</td>
                 <td>{p.name}</td>
                 <td>{p.price}</td>
-                <td>{p.quantity}</td>
+                <td>{p.stockQuantity}</td>
               </tr>
             ))}
           </tbody>
