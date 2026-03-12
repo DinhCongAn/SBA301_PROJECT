@@ -304,7 +304,7 @@ CREATE TABLE sliders (
     image_url NVARCHAR(255) NOT NULL,
     link_url NVARCHAR(255),
     title NVARCHAR(255),
-    description NVARCHAR(MAX),
+    [description] NVARCHAR(MAX),
     status NVARCHAR(50) DEFAULT 'active',
     order_number INT DEFAULT 0
 );
