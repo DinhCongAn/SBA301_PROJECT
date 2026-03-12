@@ -1,13 +1,24 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import ProductPage from "./pages/ProductPage";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import CustomerLayout from "./layouts/CustomerLayout";
+import Home from "./pages/Home";
+import ProductList from "./pages/ProductList"; 
 
 function App() {
   return (
-    <div>
-      {/* Sau này có thể thêm Header/Navbar ở đây */}
-      <ProductPage />
-      {/* Sau này có thể thêm Footer ở đây */}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Đường dẫn cha sử dụng CustomerLayout */}
+        <Route path="/" element={<CustomerLayout />}>
+            
+            {/* Các trang con tự động nhảy vào thẻ <Outlet /> */}
+            <Route index element={<Home />} />
+            <Route path="products" element={<ProductList />} />
+            {/* Sau này thêm trang vào đây: <Route path="cart" element={<Cart />} /> */}
+
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
