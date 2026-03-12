@@ -1,67 +1,43 @@
 package com.minimart.backend.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Nationalized;
-
+import lombok.Data;
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "Products")
+@Data
 public class Product {
     @Id
-    @Column(name = "product_id", nullable = false)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
+    private Long productId; // Ánh xạ đúng tên cột product_id
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @Size(max = 255)
-    @NotNull
-    @Nationalized
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Nationalized
-    @Lob
-    @Column(name = "description")
     private String description;
 
-    @NotNull
-    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false)
     private BigDecimal price;
 
-    @NotNull
-    @ColumnDefault("0")
     @Column(name = "stock_quantity", nullable = false)
     private Integer stockQuantity;
 
-    @Size(max = 500)
-    @Nationalized
-    @Column(name = "thumbnail_url", length = 500)
-    private String thumbnailUrl;
+    @Column(name = "thumbnail_url")
+    private String thumbnailUrl; // Ánh xạ cột thumbnail_url
 
-    @Size(max = 20)
-    @NotNull
-    @Nationalized
-    @ColumnDefault("'active'")
-    @Column(name = "status", nullable = false, length = 20)
+    @Column(nullable = false)
     private String status;
 
-    @ColumnDefault("getdate()")
-    @Column(name = "created_at")
-    private Instant createdAt;
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private Instant updatedAt;
-
+    private LocalDateTime updatedAt;
 }

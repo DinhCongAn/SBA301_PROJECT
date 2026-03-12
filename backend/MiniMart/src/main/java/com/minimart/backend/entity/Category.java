@@ -1,35 +1,22 @@
 package com.minimart.backend.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.Nationalized;
+import lombok.Data;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "Categories")
+@Data
 public class Category {
     @Id
-    @Column(name = "category_id", nullable = false)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_id")
+    private Long categoryId; // Ánh xạ đúng tên cột category_id
 
-    @Size(max = 100)
-    @NotNull
-    @Nationalized
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Nationalized
-    @Lob
-    @Column(name = "description")
     private String description;
 
-    @Size(max = 255)
-    @Nationalized
     @Column(name = "image_url")
     private String imageUrl;
-
 }
