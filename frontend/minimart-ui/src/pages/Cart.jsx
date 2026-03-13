@@ -42,6 +42,7 @@ const Cart = () => {
         try {
             // Sửa thành gọi updateCartItemApi
             await updateCartItemApi(user.user_id, item.product.productId, newQuantity);
+            window.dispatchEvent(new Event('cartUpdated'));
         } catch (error) {
             alert("Lỗi cập nhật số lượng!");
             loadCart(); 
@@ -52,6 +53,7 @@ const Cart = () => {
     const handleRemove = async (cartItemId) => {
         if(window.confirm("Bạn muốn bỏ sản phẩm này khỏi giỏ hàng?")) {
             await removeCartItem(cartItemId);
+            window.dispatchEvent(new Event('cartUpdated'));
             loadCart();
             setRecipe(''); // Reset AI nếu giỏ thay đổi
         }

@@ -52,7 +52,7 @@ const ProductDetail = () => {
 
         try {
             await addToCartApi(user.user_id, product.productId, quantity);
-            
+            window.dispatchEvent(new Event('cartUpdated'));
             // Hiện thông báo đẹp hơn thay vì alert (tùy chọn)
             if(window.confirm(`Đã thêm ${quantity} "${product.name}" vào giỏ hàng! Bạn có muốn đến giỏ hàng ngay không?`)) {
                 navigate('/cart');

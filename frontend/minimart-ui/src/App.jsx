@@ -11,6 +11,7 @@ import Profile from "./pages/Profile";
 import AddressManagement from "./pages/AddressManagement";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -39,6 +40,7 @@ function App() {
 
                 <Route path="product/:id" element={<ProductDetail />} />
                 <Route path="cart" element={<Cart />} />
+                <Route path="checkout" element={<Checkout />} />
                 
             </Route>
 

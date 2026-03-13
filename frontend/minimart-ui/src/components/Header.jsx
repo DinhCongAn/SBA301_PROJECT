@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { getCart } from '../api/cartApi'; // Đảm bảo bạn đã import hàm này
 
 const Header = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -7,6 +8,35 @@ const Header = () => {
     
     // 1. Kiểm tra xem user đã đăng nhập chưa
     const user = JSON.parse(localStorage.getItem('user'));
+
+    // --- TÍNH NĂNG MỚI: CART BADGE (CHẤM ĐỎ GIỎ HÀNG) ---
+    const [cartCount, setCartCount] = useState(0);
+
+    const fetchCartCount = async () => {
+        if (user) {
+            try {
+                const res = await getCart(user.user_id);
+                // Đếm tổng số lượng (quantity) của tất cả sản phẩm trong giỏ
+                const totalItems = res.data.reduce((sum, item) => sum + item.quantity, 0);
+                setCartCount(totalItems);
+            } catch (error) {
+                console.error("Lỗi tải số lượng giỏ hàng", error);
+            }
+        } else {
+            setCartCount(0);
+        }
+    };
+
+    useEffect(() => {
+        fetchCartCount(); // Lấy số lượng lần đầu khi load trang
+        
+        // Lắng nghe tín hiệu cập nhật giỏ hàng từ các trang khác
+        window.addEventListener('cartUpdated', fetchCartCount);
+        
+        // Hủy lắng nghe khi Component bị unmount
+        return () => window.removeEventListener('cartUpdated', fetchCartCount);
+    }, [user?.user_id]); // Thêm user_id vào dependency để cập nhật lại nếu user thay đổi
+    // ----------------------------------------------------
 
     const handleSearch = (e) => {
         if (e.key === 'Enter' && searchQuery.trim() !== '') {
@@ -18,9 +48,9 @@ const Header = () => {
     const handleCartClick = () => {
         if (!user) {
             alert("Vui lòng đăng nhập để xem giỏ hàng!");
-            navigate('/login'); // Chuyển hướng về trang đăng nhập
+            navigate('/login');
         } else {
-            navigate('/cart'); // Sau này làm trang Cart thì URL sẽ tới đây
+            navigate('/cart');
         }
     };
 
@@ -28,7 +58,8 @@ const Header = () => {
     const handleLogout = () => {
         if(window.confirm('Bạn có chắc chắn muốn đăng xuất?')) {
             localStorage.removeItem('user');
-            navigate('/'); // Về trang chủ
+            setCartCount(0); // Reset số lượng giỏ hàng về 0 khi đăng xuất
+            navigate('/');
         }
     };
 
@@ -62,11 +93,15 @@ const Header = () => {
                     <div className="flex items-center space-x-6">
                         <Link to="/products" className="text-gray-600 hover:text-emerald-600 font-medium hidden md:block">Sản phẩm</Link>
                         
-                        {/* GIỎ HÀNG (Có bảo mật) */}
+                        {/* GIỎ HÀNG (Có bảo mật & Chấm đỏ nhảy số) */}
                         <div onClick={handleCartClick} className="relative cursor-pointer text-gray-600 hover:text-emerald-600">
                             <i className="fas fa-shopping-cart text-xl"></i>
-                            {user && ( // Chỉ hiện số lượng khi đã đăng nhập
-                                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">0</span>
+                            
+                            {/* Chỉ hiện cục chấm đỏ khi user đã đăng nhập VÀ có hàng trong giỏ */}
+                            {user && cartCount > 0 && ( 
+                                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold animate-bounce-short">
+                                    {cartCount > 99 ? '99+' : cartCount}
+                                </span>
                             )}
                         </div>
                         
@@ -75,7 +110,6 @@ const Header = () => {
                             // Đã đăng nhập: Hiện Avatar + Tên + Dropdown
                             <div className="relative group cursor-pointer py-4">
                                 <div className="flex items-center space-x-2 text-gray-600 hover:text-emerald-600">
-                                    {/* ĐÃ SỬA: Kiểm tra nếu có avatar_url thì hiện ảnh, không thì hiện chữ cái */}
                                  {user.avatar_url ? (
                                    <img 
                                     src={user.avatar_url} 

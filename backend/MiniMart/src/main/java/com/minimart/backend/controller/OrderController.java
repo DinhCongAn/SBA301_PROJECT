@@ -2,6 +2,7 @@ package com.minimart.backend.controller;
 
 import com.minimart.backend.entity.*;
 import com.minimart.backend.repository.*;
+import com.minimart.backend.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class OrderController {
     @Autowired private PromotionRepository promotionRepository;
     @Autowired private UserRepository userRepository;
     @Autowired private ProductRepository productRepository;
+    @Autowired private EmailService emailService;
 
     // 1. KIỂM TRA MÃ KHUYẾN MÃI
     @PostMapping("/apply-promo")
@@ -107,7 +109,28 @@ public class OrderController {
         for (CartItem item : cartItems) {
             cartItemRepository.delete(item);
         }
-
+        // Gửi email xác nhận đơn hàng
+        emailService.sendOrderConfirmationEmail(user.getEmail(), order, user.getFullName());
         return ResponseEntity.ok(Collections.singletonMap("message", "Đặt hàng thành công! Mã đơn: " + order.getOrderCode()));
+    }
+
+    // 3. CẬP NHẬT TRẠNG THÁI ĐƠN HÀNG(ADMIN)
+    @PutMapping("/{orderId}/status")
+    public ResponseEntity<?> updateOrderStatus(@PathVariable Long orderId, @RequestBody Map<String, String> request) {
+        String newStatus = request.get("status"); // PROCESSING, DELIVERING, DELIVERED, CANCELLED
+
+        Optional<Order> orderOpt = orderRepository.findById(orderId);
+        if (orderOpt.isPresent()) {
+            Order order = orderOpt.get();
+            order.setStatus(newStatus.toUpperCase());
+            orderRepository.save(order);
+
+            // Gửi mail báo cho khách biết Admin vừa đổi trạng thái
+            User user = order.getUser();
+            emailService.sendOrderStatusUpdateEmail(user.getEmail(), order, user.getFullName());
+
+            return ResponseEntity.ok("Cập nhật trạng thái thành công!");
+        }
+        return ResponseEntity.badRequest().body("Không tìm thấy đơn hàng");
     }
 }
