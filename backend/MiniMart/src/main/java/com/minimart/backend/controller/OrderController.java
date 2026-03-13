@@ -1,0 +1,113 @@
+package com.minimart.backend.controller;
+
+import com.minimart.backend.entity.*;
+import com.minimart.backend.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
+
+@RestController
+@RequestMapping("/api/orders")
+@CrossOrigin(origins = "http://localhost:5173")
+public class OrderController {
+
+    @Autowired private OrderRepository orderRepository;
+    @Autowired private OrderItemRepository orderItemRepository;
+    @Autowired private CartItemRepository cartItemRepository;
+    @Autowired private PromotionRepository promotionRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private ProductRepository productRepository;
+
+    // 1. KIỂM TRA MÃ KHUYẾN MÃI
+    @PostMapping("/apply-promo")
+    public ResponseEntity<?> applyPromo(@RequestBody Map<String, Object> request) {
+        String code = (String) request.get("code");
+        Double currentTotal = Double.valueOf(request.get("total").toString());
+
+        Optional<Promotion> promoOpt = promotionRepository.findByCodeAndIsActiveTrue(code);
+        if (!promoOpt.isPresent()) return ResponseEntity.badRequest().body("Mã giảm giá không hợp lệ hoặc đã hết hạn!");
+
+        Promotion promo = promoOpt.get();
+
+        // Ép kiểu an toàn (Phòng trường hợp minOrderAmount là null)
+        Double minOrder = promo.getMinOrderAmount() != null ? ((Number) promo.getMinOrderAmount()).doubleValue() : 0.0;
+
+        if (minOrder > 0 && currentTotal < minOrder) {
+            return ResponseEntity.badRequest().body("Đơn hàng phải từ " + minOrder + "đ mới được áp dụng mã này.");
+        }
+
+        Double discountAmount = 0.0;
+        Double discountValue = ((Number) promo.getDiscountValue()).doubleValue();
+
+        // Loại bỏ khoảng trắng thừa nếu có
+        String discountType = promo.getDiscountType().trim().toUpperCase();
+
+        if ("FIXED".equals(discountType) || "FIXED_AMOUNT".equals(discountType)) {
+            discountAmount = discountValue;
+        } else if ("PERCENTAGE".equals(discountType)) {
+            // Nếu là % thì lấy Tổng tiền * (Phần trăm / 100)
+            discountAmount = currentTotal * (discountValue / 100.0);
+        }
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("discount", discountAmount);
+        res.put("message", "Áp dụng mã thành công!");
+        return ResponseEntity.ok(res);
+    }
+
+    // 2. CHỐT ĐƠN HÀNG (PLACE ORDER)
+    @PostMapping("/place-order")
+    public ResponseEntity<?> placeOrder(@RequestBody Map<String, Object> request) {
+        Long userId = Long.valueOf(request.get("userId").toString());
+        String addressSnapshot = (String) request.get("addressSnapshot");
+        String paymentMethod = (String) request.get("paymentMethod");
+        Double finalTotal = Double.valueOf(request.get("finalTotal").toString());
+
+        // Lấy giỏ hàng hiện tại
+        List<CartItem> cartItems = cartItemRepository.findByUser_UserId(userId);
+        if (cartItems.isEmpty()) return ResponseEntity.badRequest().body("Giỏ hàng đang trống!");
+
+        User user = userRepository.findById(userId).get();
+
+        // Tạo Đơn hàng
+        Order order = new Order();
+        order.setUser(user);
+        order.setOrderCode("ORD-" + System.currentTimeMillis()); // Random mã đơn
+        order.setShippingAddress(addressSnapshot);
+        order.setPaymentMethod(paymentMethod);
+        order.setTotalAmount(finalTotal);
+        order.setStatus("PENDING");
+        order = orderRepository.save(order);
+
+        // Chuyển CartItem thành OrderItem & TRỪ TỒN KHO
+        for (CartItem item : cartItems) {
+            Product product = item.getProduct();
+
+            // Check lại tồn kho phút chót (Tránh trường hợp 2 người mua cùng lúc)
+            if(product.getStockQuantity() < item.getQuantity()){
+                return ResponseEntity.badRequest().body("Sản phẩm " + product.getName() + " không đủ số lượng!");
+            }
+
+            // Trừ tồn kho
+            product.setStockQuantity(product.getStockQuantity() - item.getQuantity());
+            productRepository.save(product);
+
+            // Lưu chi tiết đơn
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setProduct(product);
+            orderItem.setQuantity(item.getQuantity());
+            orderItem.setPriceAtPurchase(product.getPrice().doubleValue());
+            orderItemRepository.save(orderItem);
+        }
+
+        // Làm sạch giỏ hàng
+        for (CartItem item : cartItems) {
+            cartItemRepository.delete(item);
+        }
+
+        return ResponseEntity.ok(Collections.singletonMap("message", "Đặt hàng thành công! Mã đơn: " + order.getOrderCode()));
+    }
+}
