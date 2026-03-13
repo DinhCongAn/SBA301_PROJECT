@@ -137,4 +137,25 @@ public class AIService {
             return "Hệ thống tóm tắt AI đang bận. Vui lòng thử lại sau.";
         }
     }
+
+    //AI CHEF - GỢI Ý MÓN ĂN TỪ GIỎ HÀNG
+    public String suggestRecipeFromCart(List<String> ingredients) {
+        if (geminiClient == null) return "Hệ thống AI đang bảo trì.";
+        if (ingredients == null || ingredients.isEmpty()) return "Giỏ hàng của bạn đang trống.";
+
+        String items = String.join(", ", ingredients);
+        String prompt = "Tôi đang ở siêu thị và trong giỏ hàng của tôi có các nguyên liệu sau: [" + items + "]. " +
+                "Hãy đóng vai một siêu đầu bếp nhà hàng 5 sao. Dựa vào TẤT CẢ hoặc MỘT VÀI nguyên liệu chính ở trên (có thể giả định tôi đã có sẵn các gia vị cơ bản như mắm, muối, tiêu, hành tỏi ở nhà), " +
+                "hãy gợi ý cho tôi 1 công thức nấu ăn xuất sắc nhất.\n\n" +
+                "Trình bày format ngắn gọn, hấp dẫn gồm 3 phần:\n" +
+                "🍲 Tên món ăn:\n" +
+                "🛒 Nguyên liệu cần dùng:\n" +
+                "👨‍🍳 Cách làm (3-4 bước ngắn gọn):";
+
+        try {
+            return geminiClient.models.generateContent("gemini-2.5-flash", prompt, null).text();
+        } catch (Exception e) {
+            return "Đầu bếp AI đang bận nấu ăn, vui lòng thử lại sau nhé!";
+        }
+    }
 }

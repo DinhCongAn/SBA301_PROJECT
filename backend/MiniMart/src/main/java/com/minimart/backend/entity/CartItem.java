@@ -1,45 +1,34 @@
 package com.minimart.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
+import lombok.Data;
 import java.time.Instant;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "Cart_Items")
+@Data
 public class CartItem {
     @Id
-    @Column(name = "cart_item_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_item_id")
     private Long id;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"password", "email", "phone", "role", "createdAt", "updatedAt"})
     private User user;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @NotNull
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @ColumnDefault("getdate()")
-    @Column(name = "added_at")
+    @Column(name = "added_at", updatable = false)
     private Instant addedAt;
 
-    @Column(name = "updated_at")
-    private Instant updatedAt;
-
+    @PrePersist
+    protected void onCreate() { this.addedAt = Instant.now(); }
 }
