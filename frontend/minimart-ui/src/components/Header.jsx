@@ -11,12 +11,12 @@ const Header = () => {
             navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
         }
     };
-    
+
 
     // Xóa keyword
     const clearSearch = () => {
         setSearchQuery('');
-    };
+    };  
 
     return (
         <nav className="bg-white shadow-sm sticky top-0 z-40">
