@@ -11,6 +11,7 @@ const Header = () => {
             navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
         }
     };
+    
 
     // Xóa keyword
     const clearSearch = () => {
