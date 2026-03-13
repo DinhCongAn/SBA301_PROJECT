@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { fetchProductById, fetchAiSummary, fetchReviews, addReviewApi } from '../api/productApi';
+import { addToCartApi } from '../api/cartApi';
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -42,14 +43,23 @@ const ProductDetail = () => {
     useEffect(() => { loadData(); }, [id]);
 
     // XỬ LÝ GIỎ HÀNG
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (!user) {
             alert("Vui lòng đăng nhập để mua hàng!");
             navigate('/login');
             return;
         }
-        // Gọi Redux hoặc API ở đây (Làm sau)
-        alert(`Đã thêm ${quantity} "${product.name}" vào giỏ hàng!`);
+
+        try {
+            await addToCartApi(user.user_id, product.productId, quantity);
+            
+            // Hiện thông báo đẹp hơn thay vì alert (tùy chọn)
+            if(window.confirm(`Đã thêm ${quantity} "${product.name}" vào giỏ hàng! Bạn có muốn đến giỏ hàng ngay không?`)) {
+                navigate('/cart');
+            }
+        } catch (error) {
+            alert(error.response?.data || "Lỗi khi thêm vào giỏ hàng!");
+        }
     };
 
     // GỌI AI TÓM TẮT
