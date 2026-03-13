@@ -12,6 +12,7 @@ import AddressManagement from "./pages/AddressManagement";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Orders from "./pages/Orders";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -36,11 +37,12 @@ function App() {
                 {/* TÀI KHOẢN CÁ NHÂN */}
                 <Route path="profile" element={<Profile />} />
                 <Route path="address" element={<AddressManagement />} />
-                {/* <Route path="orders" element={<OrderHistory />} /> --> Chừa sẵn sau này làm */}
+                
 
                 <Route path="product/:id" element={<ProductDetail />} />
                 <Route path="cart" element={<Cart />} />
                 <Route path="checkout" element={<Checkout />} />
+                <Route path="orders" element={<Orders />} />
                 
             </Route>
 

@@ -22,7 +22,7 @@ public class OrderController {
     @Autowired private ProductRepository productRepository;
     @Autowired private EmailService emailService;
 
-    // 1. KIỂM TRA MÃ KHUYẾN MÃI
+    //KIỂM TRA MÃ KHUYẾN MÃI
     @PostMapping("/apply-promo")
     public ResponseEntity<?> applyPromo(@RequestBody Map<String, Object> request) {
         String code = (String) request.get("code");
@@ -59,7 +59,7 @@ public class OrderController {
         return ResponseEntity.ok(res);
     }
 
-    // 2. CHỐT ĐƠN HÀNG (PLACE ORDER)
+    //CHỐT ĐƠN HÀNG (PLACE ORDER)
     @PostMapping("/place-order")
     public ResponseEntity<?> placeOrder(@RequestBody Map<String, Object> request) {
         Long userId = Long.valueOf(request.get("userId").toString());
@@ -114,7 +114,7 @@ public class OrderController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Đặt hàng thành công! Mã đơn: " + order.getOrderCode()));
     }
 
-    // 3. CẬP NHẬT TRẠNG THÁI ĐƠN HÀNG(ADMIN)
+    //CẬP NHẬT TRẠNG THÁI ĐƠN HÀNG(ADMIN)
     @PutMapping("/{orderId}/status")
     public ResponseEntity<?> updateOrderStatus(@PathVariable Long orderId, @RequestBody Map<String, String> request) {
         String newStatus = request.get("status"); // PROCESSING, DELIVERING, DELIVERED, CANCELLED
@@ -132,5 +132,58 @@ public class OrderController {
             return ResponseEntity.ok("Cập nhật trạng thái thành công!");
         }
         return ResponseEntity.badRequest().body("Không tìm thấy đơn hàng");
+    }
+
+    //LẤY DANH SÁCH ĐƠN HÀNG CỦA USER
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getUserOrders(@PathVariable Long userId) {
+        return ResponseEntity.ok(orderRepository.findByUser_UserIdOrderByOrderDateDesc(userId));
+    }
+
+    //LẤY CHI TIẾT CÁC MÓN TRONG 1 ĐƠN HÀNG
+    @GetMapping("/{orderId}/items")
+    public ResponseEntity<?> getOrderItems(@PathVariable Long orderId) {
+        return ResponseEntity.ok(orderItemRepository.findByOrder_Id(orderId));
+    }
+
+    //KHÁCH HÀNG TỰ HỦY ĐƠN HÀNG (Chỉ khi PENDING)
+    @PutMapping("/{orderId}/cancel")
+    public ResponseEntity<?> cancelOrder(@PathVariable Long orderId, @RequestParam Long userId) {
+        Optional<Order> orderOpt = orderRepository.findById(orderId);
+        if (!orderOpt.isPresent()) {
+            return ResponseEntity.badRequest().body("Không tìm thấy đơn hàng.");
+        }
+
+        Order order = orderOpt.get();
+
+        // Bảo mật: Kiểm tra xem đơn này có đúng là của user đang request không
+        if (!order.getUser().getUserId().equals(userId)) {
+            return ResponseEntity.badRequest().body("Bạn không có quyền hủy đơn hàng này.");
+        }
+
+        // Logic: Chỉ cho phép hủy khi đang PENDING (Chờ xác nhận)
+        if (!"PENDING".equals(order.getStatus())) {
+            return ResponseEntity.badRequest().body("Bạn chỉ có thể hủy khi đơn hàng đang ở trạng thái Chờ xác nhận.");
+        }
+
+        // 1. Tiến hành hủy đơn
+        order.setStatus("CANCELLED");
+        orderRepository.save(order);
+
+        // 2. HOÀN LẠI SỐ LƯỢNG TỒN KHO VÀO DATABASE
+        List<OrderItem> items = orderItemRepository.findByOrder_Id(orderId);
+        for (OrderItem item : items) {
+            Product product = item.getProduct();
+            // Lấy tồn kho hiện tại + cộng lại số lượng khách vừa hủy
+            product.setStockQuantity(product.getStockQuantity() + item.getQuantity());
+            productRepository.save(product);
+        }
+
+        // 3. Gửi email thông báo hủy đơn thành công (Gọi anh Bưu tá)
+        if (emailService != null) {
+            emailService.sendOrderStatusUpdateEmail(order.getUser().getEmail(), order, order.getUser().getFullName());
+        }
+
+        return ResponseEntity.ok("Hủy đơn hàng thành công!");
     }
 }

@@ -36,4 +36,7 @@ public class Order {
 
     @PrePersist
     protected void onCreate() { this.orderDate = Instant.now(); }
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    private java.util.List<OrderItem> orderItems;
 }
