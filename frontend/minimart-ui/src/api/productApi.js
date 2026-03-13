@@ -31,3 +31,27 @@ export const fetchCategories = async () => {
         return [];
     }
 };
+
+// Lấy chi tiết 1 sản phẩm
+export const fetchProductById = async (id) => {
+    const response = await axios.get(`http://localhost:8080/api/products/${id}`);
+    return response.data;
+};
+
+// Gọi AI Tóm tắt bình luận
+export const fetchAiSummary = async (id) => {
+    const response = await axios.get(`http://localhost:8080/api/products/${id}/ai-summary`);
+    return response.data.summary;
+};
+
+// Lấy danh sách đánh giá
+export const fetchReviews = async (productId) => {
+    const res = await axios.get(`http://localhost:8080/api/products/${productId}/reviews`);
+    return res.data;
+};
+
+// Gửi đánh giá mới
+export const addReviewApi = async (productId, reviewData) => {
+    const res = await axios.post(`http://localhost:8080/api/products/${productId}/reviews`, reviewData);
+    return res.data;
+};

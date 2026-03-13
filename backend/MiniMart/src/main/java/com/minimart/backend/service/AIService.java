@@ -3,7 +3,9 @@ package com.minimart.backend.service;
 import com.google.genai.Client;
 import com.google.genai.types.HttpOptions;
 import com.minimart.backend.entity.Product;
+import com.minimart.backend.entity.ProductReview;
 import com.minimart.backend.repository.ProductRepository;
+import com.minimart.backend.repository.ReviewRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +22,8 @@ public class AIService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     private Client geminiClient;
 
@@ -45,9 +49,8 @@ public class AIService {
         }
     }
 
-    // ==========================================
-    // MAIN METHOD
-    // ==========================================
+
+    // Gợi ý mua hàng bằng AI
     public String getShoppingAdvice(String userMessage) {
 
         if (geminiClient == null) {
@@ -93,6 +96,45 @@ public class AIService {
 
             return "Xin lỗi, hiện tại hệ thống tư vấn AI đang bận. "
                     + "Bạn có thể tự tìm sản phẩm trên thanh công cụ nhé!";
+        }
+    }
+
+    // Tóm tắt bình luận của sản phẩm bằng AI
+    public String summarizeReviews(Long productId) {
+        if (geminiClient == null) return "Hệ thống AI đang bảo trì.";
+
+        // 1. Kéo toàn bộ bình luận của sản phẩm này lên
+        List<ProductReview> reviews = reviewRepository.findByProduct_ProductId(productId);
+
+        if (reviews.isEmpty()) {
+            return "Sản phẩm này chưa có đánh giá nào để AI tóm tắt.";
+        }
+
+        // 2. Nối tất cả bình luận thành 1 đoạn văn bản dài
+        String allComments = reviews.stream()
+                .filter(r -> r.getComment() != null && !r.getComment().trim().isEmpty())
+                .map(r -> "- " + r.getComment())
+                .collect(Collectors.joining("\n"));
+
+        if (allComments.isEmpty()) return "Chưa có đánh giá dạng chữ để AI phân tích.";
+
+        // 3. Ra lệnh (Prompt) cho Google Gemini
+        String prompt = "Bạn là một chuyên gia phân tích dữ liệu mua sắm.\n" +
+                "Dưới đây là các bình luận thực tế của khách hàng về 1 sản phẩm:\n" +
+                allComments + "\n\n" +
+                "Dựa vào các bình luận trên, hãy tóm tắt ngắn gọn lại thành 2 phần rõ ràng. " +
+                "Không bịa đặt thêm thông tin ngoài bình luận. Trình bày chính xác theo format sau:\n" +
+                "Ưu điểm chung:\n" +
+                "- (Liệt kê các ưu điểm...)\n" +
+                "Nhược điểm chung:\n" +
+                "- (Liệt kê các nhược điểm...)";
+
+        try {
+            // Gọi AI xử lý
+            return geminiClient.models.generateContent("gemini-2.5-flash", prompt, null).text();
+        } catch (Exception e) {
+            System.err.println("Lỗi AI Summarize: " + e.getMessage());
+            return "Hệ thống tóm tắt AI đang bận. Vui lòng thử lại sau.";
         }
     }
 }
