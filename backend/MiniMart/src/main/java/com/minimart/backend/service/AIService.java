@@ -24,7 +24,7 @@ public class AIService {
     private Client geminiClient;
 
     // ==========================================
-    // INIT GEMINI CLIENT (GIỐNG SERVICE 1)
+    // INIT GEMINI CLIENT
     // ==========================================
     @PostConstruct
     public void initializeClient() {

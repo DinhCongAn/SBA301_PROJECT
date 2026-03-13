@@ -310,6 +310,9 @@ CREATE TABLE sliders (
 );
 GO
 ALTER TABLE users ADD avatar_url VARCHAR(MAX);
+-- Thêm cột Họ Tên và Số điện thoại vào bảng Addresses 
+ALTER TABLE Addresses ADD receiver_name NVARCHAR(100) DEFAULT 'Khach Hang' WITH VALUES;
+ALTER TABLE Addresses ADD phone VARCHAR(20) DEFAULT '0123456789' WITH VALUES;
 
 --------------------------------------------------------------------------------
 -- ✅ THÔNG BÁO HOÀN TẤT
