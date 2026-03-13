@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import AIChatbot from '../components/AIChatbot';
 
 const CustomerLayout = () => {
     return (
@@ -19,6 +20,8 @@ const CustomerLayout = () => {
 
             {/* Footer luôn cố định ở dưới cùng */}
             <Footer />
+
+            <AIChatbot />
             
         </div>
     );
