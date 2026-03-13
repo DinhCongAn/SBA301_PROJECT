@@ -67,6 +67,7 @@ public class AuthController {
             response.put("full_name", user.getFullName());
             response.put("role", user.getRole());
             response.put("email", user.getEmail());
+            response.put("phone", user.getPhone());
             response.put("avatar_url", user.getAvatarUrl());
 
             // Kiểm tra mật khẩu (Dùng chung logic)
@@ -110,6 +111,7 @@ public class AuthController {
                 response.put("username", user.getUsername());
                 response.put("full_name", user.getFullName());
                 response.put("role", user.getRole());
+                response.put("phone", user.getPhone());
                 response.put("avatar_url", user.getAvatarUrl());
                 response.put("email", user.getEmail());
 

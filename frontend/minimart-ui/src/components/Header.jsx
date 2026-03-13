@@ -92,7 +92,16 @@ const Header = () => {
                     {/* MENU BÊN PHẢI */}
                     <div className="flex items-center space-x-6">
                         <Link to="/products" className="text-gray-600 hover:text-emerald-600 font-medium hidden md:block">Sản phẩm</Link>
-                        
+                        {/* THÊM MỚI: Nút Quản trị dành riêng cho Admin */}
+                         {user && user.role === 'ADMIN' && (
+                         <Link 
+                         to="/admin" 
+                         className="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-lg font-bold hover:bg-emerald-100 transition border border-emerald-200 hidden md:flex"
+                       >
+                         <i className="fas fa-user-shield"></i>
+                       Quản trị
+                       </Link>
+                        )}
                         {/* GIỎ HÀNG (Có bảo mật & Chấm đỏ nhảy số) */}
                         <div onClick={handleCartClick} className="relative cursor-pointer text-gray-600 hover:text-emerald-600">
                             <i className="fas fa-shopping-cart text-xl"></i>
