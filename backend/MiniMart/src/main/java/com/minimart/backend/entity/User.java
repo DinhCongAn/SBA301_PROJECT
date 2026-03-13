@@ -38,6 +38,9 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "avatar_url", columnDefinition = "VARCHAR(MAX)")
+    private String avatarUrl;
+
     // Tự động set thời gian khi tạo mới tài khoản
     @PrePersist
     protected void onCreate() {

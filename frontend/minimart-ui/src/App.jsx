@@ -7,6 +7,8 @@ import ProductList from "./pages/ProductList";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
+import Profile from "./pages/Profile";
+import AddressManagement from "./pages/AddressManagement";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -27,6 +29,11 @@ function App() {
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
                 <Route path="forgot-password" element={<ForgotPassword />} />
+
+                {/* TÀI KHOẢN CÁ NHÂN */}
+                <Route path="profile" element={<Profile />} />
+                <Route path="address" element={<AddressManagement />} />
+                {/* <Route path="orders" element={<OrderHistory />} /> --> Chừa sẵn sau này làm */}
                 
             </Route>
 

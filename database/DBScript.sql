@@ -309,6 +309,7 @@ CREATE TABLE sliders (
     order_number INT DEFAULT 0
 );
 GO
+ALTER TABLE users ADD avatar_url VARCHAR(MAX);
 
 --------------------------------------------------------------------------------
 -- ✅ THÔNG BÁO HOÀN TẤT

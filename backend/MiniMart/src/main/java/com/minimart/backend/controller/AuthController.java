@@ -32,6 +32,7 @@ public class AuthController {
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    // Lấy Client ID từ biến môi trường application.properties
     @Value("${GOOGLE_CLIENT_ID}")
     private String googleClientId;
 
@@ -57,6 +58,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
+
         if (userOpt.isPresent() && passwordEncoder.matches(request.getPassword(), userOpt.get().getPassword())) {
             User user = userOpt.get();
             Map<String, Object> response = new HashMap<>();
@@ -64,6 +66,13 @@ public class AuthController {
             response.put("username", user.getUsername());
             response.put("full_name", user.getFullName());
             response.put("role", user.getRole());
+            response.put("email", user.getEmail());
+            response.put("avatar_url", user.getAvatarUrl());
+
+            // Kiểm tra mật khẩu (Dùng chung logic)
+            boolean hasPassword = !passwordEncoder.matches("GOOGLE_DEFAULT_PASS", user.getPassword());
+            response.put("has_password", hasPassword);
+
             return ResponseEntity.ok(response);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai tài khoản hoặc mật khẩu!");
@@ -81,27 +90,38 @@ public class AuthController {
             if (idToken != null) {
                 GoogleIdToken.Payload payload = idToken.getPayload();
                 String email = payload.getEmail();
+                String pictureUrl = (String) payload.get("picture");
 
-                // Tìm User, nếu chưa có thì tạo mới
+                // TÌM HOẶC TẠO MỚI USER (Chỉ lưu Data ở đây)
                 User user = userRepository.findByEmail(email).orElseGet(() -> {
                     User newUser = new User();
                     newUser.setEmail(email);
                     newUser.setFullName((String) payload.get("name"));
                     newUser.setUsername("gg_" + email.split("@")[0]);
                     newUser.setRole("CUSTOMER");
-                    newUser.setPassword(passwordEncoder.encode(UUID.randomUUID().toString())); // MK ngẫu nhiên
+                    newUser.setAvatarUrl(pictureUrl);
+                    newUser.setPassword(passwordEncoder.encode("GOOGLE_DEFAULT_PASS")); // Set mật khẩu ảo
                     return userRepository.save(newUser);
                 });
 
+                // ĐƯA BIẾN RESPONSE RA NGOÀI KHỐI LAMBDA NÀY
                 Map<String, Object> response = new HashMap<>();
                 response.put("user_id", user.getUserId());
                 response.put("username", user.getUsername());
                 response.put("full_name", user.getFullName());
                 response.put("role", user.getRole());
+                response.put("avatar_url", user.getAvatarUrl());
+                response.put("email", user.getEmail());
+
+                // Kiểm tra xem đã đổi mật khẩu thật bao giờ chưa
+                boolean hasPassword = !passwordEncoder.matches("GOOGLE_DEFAULT_PASS", user.getPassword());
+                response.put("has_password", hasPassword);
+
                 return ResponseEntity.ok(response);
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token Google không hợp lệ!");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi xác thực Google.");
         }
     }
