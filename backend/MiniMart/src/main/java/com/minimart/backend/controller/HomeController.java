@@ -21,7 +21,7 @@ public class HomeController {
         return new HomeResponse(
                 sliderRepo.findByStatusOrderByOrderNumberAsc("active"),
                 categoryRepo.findAll(),
-                productRepo.findTop8ByStatusOrderByProductIdDesc("active")
+                productRepo.findTop10ByStatusOrderByProductIdDesc("active")
         );
     }
 }

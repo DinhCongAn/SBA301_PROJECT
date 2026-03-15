@@ -122,5 +122,24 @@ public class ProductController {
 
         return ResponseEntity.badRequest().body("Lỗi: Không tìm thấy sản phẩm hoặc người dùng.");
     }
+
+    // Thêm vào Controller chứa API chi tiết sản phẩm của bạn
+    @GetMapping("/{id}/similar")
+    public ResponseEntity<List<Product>> getSimilarProducts(@PathVariable Long id) {
+        // 1. Tìm sản phẩm hiện tại đang xem
+        Optional<Product> currentProductOpt = productRepository.findById(id);
+
+        if (currentProductOpt.isPresent() && currentProductOpt.get().getCategory() != null) {
+            // 2. Lấy ID danh mục của nó
+            Long categoryId = currentProductOpt.get().getCategory().getCategoryId();
+
+            // 3. Gọi hàm lấy 4 sản phẩm ngẫu nhiên cùng danh mục
+            List<Product> similarProducts = productRepository.findSimilarProducts(categoryId, id);
+            return ResponseEntity.ok(similarProducts);
+        }
+
+        // Nếu lỗi hoặc sản phẩm ko có danh mục, trả về mảng rỗng
+        return ResponseEntity.ok(List.of());
+    }
 }
 
