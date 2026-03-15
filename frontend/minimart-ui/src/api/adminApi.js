@@ -40,3 +40,15 @@ export const fetchAdminOrders = (page = 0, size = 10, search = '', status = 'ALL
 };
 
 export const updateAdminOrderStatus = (id, status) => axios.put(`${API_URL}/orders/${id}/status`, { status });
+
+// --- QUẢN LÝ KHUYẾN MÃI ---
+export const fetchAdminPromotions = (page = 0, size = 10, search = '', type = 'ALL', active = '') => {
+    let url = `${API_URL}/promotions?page=${page}&size=${size}&type=${type}`;
+    if (search) url += `&search=${search}`;
+    if (active !== '') url += `&active=${active}`; // Truyền 'true' hoặc 'false'
+    return axios.get(url);
+};
+
+export const saveAdminPromotion = (data) => axios.post(`${API_URL}/promotions`, data);
+export const toggleAdminPromotion = (id) => axios.put(`${API_URL}/promotions/${id}/toggle`);
+export const deleteAdminPromotion = (id) => axios.delete(`${API_URL}/promotions/${id}`);

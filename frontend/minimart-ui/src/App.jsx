@@ -18,6 +18,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import OrderManagement from "./pages/admin/OrderManagement";
 import ProductManagement from "./pages/admin/ProductManagement";
 import CategoryManagement from "./pages/admin/CategoryManagement";
+import PromotionManagement from "./pages/admin/PromotionManagement";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -65,6 +66,7 @@ function App() {
           
           {/* Tương tự cho đơn hàng */}
           <Route path="orders" element={<OrderManagement />} />
+          <Route path="promotions" element={<PromotionManagement />} />
           
         </Route>
                 

@@ -41,7 +41,6 @@ public class AdminOrderController {
         }
 
         if (endDate != null && !endDate.isEmpty()) {
-            // Lấy đến 23:59:59 của ngày kết thúc (Múi giờ Việt Nam +07)
             end = LocalDate.parse(endDate).atTime(LocalTime.MAX).atZone(ZoneId.of("Asia/Ho_Chi_Minh")).toInstant();
         }
 

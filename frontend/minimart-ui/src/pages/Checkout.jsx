@@ -20,6 +20,9 @@ const Checkout = () => {
     const [discount, setDiscount] = useState(0);
     const [promoMessage, setPromoMessage] = useState('');
     
+    // 🚀 STATE MỚI: Cần một state riêng để lưu mã KM đã được áp dụng thành công
+    const [appliedPromo, setAppliedPromo] = useState(''); 
+
     const [loading, setLoading] = useState(true);
     const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
@@ -52,7 +55,7 @@ const Checkout = () => {
         };
 
         loadCheckoutData();
-    }, [navigate]);
+    }, [navigate, user?.user_id]);
 
     // TÍNH TOÁN TIỀN
     const subTotal = cartItems.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
@@ -68,8 +71,12 @@ const Checkout = () => {
             const res = await applyPromoCode(promoCode, subTotal);
             setDiscount(res.data.discount);
             setPromoMessage({ text: res.data.message, type: 'success' });
+            
+            // 🚀 Lưu lại cái mã mà Backend vừa khen là hợp lệ
+            setAppliedPromo(promoCode.trim().toUpperCase()); 
         } catch (error) {
             setDiscount(0);
+            setAppliedPromo(''); // Nếu lỗi thì xóa mã đã lưu
             setPromoMessage({ text: error.response?.data || "Mã không hợp lệ", type: 'error' });
         }
     };
@@ -84,11 +91,13 @@ const Checkout = () => {
         const selectedAddr = addresses.find(a => a.id === parseInt(selectedAddressId));
         const addressSnapshot = `${selectedAddr.receiverName} - ${selectedAddr.phone} - ${selectedAddr.street}, ${selectedAddr.city}, ${selectedAddr.province}`;
 
+        // 🚀 ĐÃ SỬA: Bổ sung thêm promoCode vào payload
         const payload = {
             userId: user.user_id,
             addressSnapshot: addressSnapshot,
             paymentMethod: paymentMethod,
-            finalTotal: finalTotal
+            finalTotal: finalTotal,
+            promoCode: appliedPromo // Gửi cái mã đã áp dụng thành công xuống
         };
 
         try {

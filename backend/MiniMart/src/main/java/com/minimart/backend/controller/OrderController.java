@@ -22,7 +22,7 @@ public class OrderController {
     @Autowired private ProductRepository productRepository;
     @Autowired private EmailService emailService;
 
-    //KIỂM TRA MÃ KHUYẾN MÃI
+    // 1. KIỂM TRA MÃ KHUYẾN MÃI (Đã bổ sung chặn mã hết lượt)
     @PostMapping("/apply-promo")
     public ResponseEntity<?> applyPromo(@RequestBody Map<String, Object> request) {
         String code = (String) request.get("code");
@@ -32,6 +32,14 @@ public class OrderController {
         if (!promoOpt.isPresent()) return ResponseEntity.badRequest().body("Mã giảm giá không hợp lệ hoặc đã hết hạn!");
 
         Promotion promo = promoOpt.get();
+
+        // 🚀 ĐÃ THÊM: Kiểm tra số lượt sử dụng
+        if (promo.getUsageLimit() != null && promo.getUsageLimit() > 0) {
+            int used = promo.getUsedCount() != null ? promo.getUsedCount() : 0;
+            if (used >= promo.getUsageLimit()) {
+                return ResponseEntity.badRequest().body("Rất tiếc! Mã giảm giá này đã hết lượt sử dụng.");
+            }
+        }
 
         // Ép kiểu an toàn (Phòng trường hợp minOrderAmount là null)
         Double minOrder = promo.getMinOrderAmount() != null ? ((Number) promo.getMinOrderAmount()).doubleValue() : 0.0;
@@ -59,13 +67,16 @@ public class OrderController {
         return ResponseEntity.ok(res);
     }
 
-    //CHỐT ĐƠN HÀNG (PLACE ORDER)
+    // 2. CHỐT ĐƠN HÀNG (Đã bổ sung cộng dồn số lượt dùng mã)
     @PostMapping("/place-order")
     public ResponseEntity<?> placeOrder(@RequestBody Map<String, Object> request) {
         Long userId = Long.valueOf(request.get("userId").toString());
         String addressSnapshot = (String) request.get("addressSnapshot");
         String paymentMethod = (String) request.get("paymentMethod");
         Double finalTotal = Double.valueOf(request.get("finalTotal").toString());
+
+        // 🚀 ĐÃ THÊM: Lấy mã khuyến mãi từ Frontend gửi xuống
+        String promoCode = (String) request.get("promoCode");
 
         // Lấy giỏ hàng hiện tại
         List<CartItem> cartItems = cartItemRepository.findByUser_UserId(userId);
@@ -109,6 +120,18 @@ public class OrderController {
         for (CartItem item : cartItems) {
             cartItemRepository.delete(item);
         }
+
+        // 🚀 ĐÃ THÊM: Tăng số lượt sử dụng mã Khuyến mãi lên 1 (Nếu có xài mã)
+        if (promoCode != null && !promoCode.trim().isEmpty()) {
+            Optional<Promotion> appliedPromoOpt = promotionRepository.findByCodeAndIsActiveTrue(promoCode);
+            if (appliedPromoOpt.isPresent()) {
+                Promotion appliedPromo = appliedPromoOpt.get();
+                int currentUsed = appliedPromo.getUsedCount() != null ? appliedPromo.getUsedCount() : 0;
+                appliedPromo.setUsedCount(currentUsed + 1);
+                promotionRepository.save(appliedPromo);
+            }
+        }
+
         // Gửi email xác nhận đơn hàng
         emailService.sendOrderConfirmationEmail(user.getEmail(), order, user.getFullName());
         return ResponseEntity.ok(Collections.singletonMap("message", "Đặt hàng thành công! Mã đơn: " + order.getOrderCode()));
@@ -117,7 +140,7 @@ public class OrderController {
     //CẬP NHẬT TRẠNG THÁI ĐƠN HÀNG(ADMIN)
     @PutMapping("/{orderId}/status")
     public ResponseEntity<?> updateOrderStatus(@PathVariable Long orderId, @RequestBody Map<String, String> request) {
-        String newStatus = request.get("status"); // PROCESSING, DELIVERING, DELIVERED, CANCELLED
+        String newStatus = request.get("status"); // PENDING, DELIVERING, DELIVERED, CANCELLED
 
         Optional<Order> orderOpt = orderRepository.findById(orderId);
         if (orderOpt.isPresent()) {
