@@ -74,7 +74,7 @@ GO
 INSERT INTO Categories (name, description, image_url) VALUES
 (N'Trái cây tươi', N'Hoa quả tươi nhập khẩu và nội địa, nguồn gốc rõ ràng.', N'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=600'),
 (N'Rau củ quả', N'Rau củ sạch đạt chuẩn VietGAP, tươi ngon mỗi ngày.', N'https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?w=600'),
-(N'Thịt cá', N'Thịt heo, bò, gà và hải sản tươi sống đông lạnh.', N'https://images.unsplash.com/photo-1603048297172-c92544798d5e?w=600'),
+(N'Thịt cá', N'Thịt heo, bò, gà và hải sản tươi sống đông lạnh.', N'https://laodongthudo.vn/stores/news_dataimages/thanhtrung/112017/28/09/lam-the-nao-de-biet-duoc-thit-ca-da-bi-hong-23-.7893.jpg'),
 (N'Sữa & Trứng', N'Sữa tươi, sữa chua, phô mai và trứng gia cầm sạch.', N'https://images.unsplash.com/photo-1628088062854-d1870b4553da?w=600'),
 (N'Đồ uống', N'Nước tinh khiết, nước ngọt, bia và các loại thức uống khác.', N'https://images.unsplash.com/photo-1527661591475-527312dd65f5?w=600'),
 (N'Gia vị', N'Mắm, muối, đường, bột ngọt và các loại sốt nấu ăn.', N'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=600');
@@ -86,45 +86,45 @@ GO
 
 -- Category 1: Trái cây tươi
 INSERT INTO Products (category_id, name, description, price, stock_quantity, thumbnail_url, status) VALUES
-((SELECT category_id FROM Categories WHERE name = N'Trái cây tươi'), N'Chuối Cavendish Nam Mỹ (Nải)', N'Chuối chín tự nhiên, giàu kali và vitamin. Đảm bảo an toàn vệ sinh thực phẩm.', 45000, 50, N'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Trái cây tươi'), N'Táo nhập khẩu Mỹ (1kg)', N'Táo giòn, ngọt lịm, vỏ mỏng, giàu vitamin C.', 120000, 100, N'https://images.unsplash.com/photo-1560806887-1e4cd0b6fac6?w=600', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Trái cây tươi'), N'Dưa hấu không hạt (1 trái)', N'Dưa hấu ruột đỏ tươi, mọng nước, giải khát tuyệt vời.', 65000, 30, N'https://images.unsplash.com/photo-1589984662646-e7b2e4962f18?w=600', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Trái cây tươi'), N'Sầu riêng Ri6 (Kg)', N'Sầu riêng chín cây, cơm vàng hạt lép, thơm lừng.', 150000, 20, N'https://bizweb.dktcdn.net/100/394/914/products/sau-rieng-ri6-1.jpg?v=1626402360407', N'active');
+((SELECT category_id FROM Categories WHERE name = N'Trái cây tươi'), N'Chuối Cavendish Nam Mỹ (Nải)', N'Chuối chín tự nhiên, giàu kali và vitamin. Đảm bảo an toàn vệ sinh thực phẩm.', 45000, 50, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRByW9VkXr_DQPg6o85G95P_odbAtsJ4rwySg&s', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Trái cây tươi'), N'Táo nhập khẩu Mỹ (1kg)', N'Táo giòn, ngọt lịm, vỏ mỏng, giàu vitamin C.', 120000, 100, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7qsAFkA4h1KBDuAAlnAuTpY8GnEFFEoB76w&s', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Trái cây tươi'), N'Dưa hấu không hạt (1 trái)', N'Dưa hấu ruột đỏ tươi, mọng nước, giải khát tuyệt vời.', 65000, 30, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRaPVLX2Wi8kDjAq57yoURmveC1aaNLY5u2w&s', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Trái cây tươi'), N'Sầu riêng Ri6 (Kg)', N'Sầu riêng chín cây, cơm vàng hạt lép, thơm lừng.', 150000, 20, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE75Xk66mOdyFfLGlll2vzaaQa0gPUFAOjOQ&s', N'active');
 
 -- Category 2: Rau củ quả
 INSERT INTO Products (category_id, name, description, price, stock_quantity, thumbnail_url, status) VALUES
-((SELECT category_id FROM Categories WHERE name = N'Rau củ quả'), N'Cà chua Cherry Đà Lạt (Hộp 500g)', N'Cà chua bi tươi ngon, thích hợp làm salad. Thu hoạch trực tiếp từ nông trại Đà Lạt.', 35000, 120, N'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Rau củ quả'), N'Rau muống VietGAP (Bó)', N'Rau muống xanh non, an toàn không thuốc trừ sâu.', 15000, 200, N'https://theme.hstatic.net/200000182297/1000887316/14/rau-muong.jpg?v=185', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Rau củ quả'), N'Khoai tây Đà Lạt (1kg)', N'Khoai tây ruột vàng, củ to đều, thích hợp chiên hoặc nấu canh.', 30000, 150, N'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Rau củ quả'), N'Cà rốt tươi (1kg)', N'Cà rốt tươi rói, nhiều nước, ngọt tự nhiên.', 25000, 100, N'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=600', N'active');
+((SELECT category_id FROM Categories WHERE name = N'Rau củ quả'), N'Cà chua Cherry Đà Lạt (Hộp 500g)', N'Cà chua bi tươi ngon, thích hợp làm salad. Thu hoạch trực tiếp từ nông trại Đà Lạt.', 35000, 120, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoXEIXlgT1cfNwwbQpszYZ2Kerc9-To_e6Ow&s', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Rau củ quả'), N'Rau muống VietGAP (Bó)', N'Rau muống xanh non, an toàn không thuốc trừ sâu.', 15000, 200, N'https://storage.googleapis.com/sc_pcm_product/prod/2024/7/26/476191-8938525767042.jpg', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Rau củ quả'), N'Khoai tây Đà Lạt (1kg)', N'Khoai tây ruột vàng, củ to đều, thích hợp chiên hoặc nấu canh.', 30000, 150, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqxtArJByggwaujIeWzbjbQuns6F3jOI3QZg&s', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Rau củ quả'), N'Cà rốt tươi (1kg)', N'Cà rốt tươi rói, nhiều nước, ngọt tự nhiên.', 25000, 100, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSduWIrIm_b1f5m9jCw8CKlu9dioHQphuf-6A&s', N'active');
 
 -- Category 3: Thịt cá
 INSERT INTO Products (category_id, name, description, price, stock_quantity, thumbnail_url, status) VALUES
-((SELECT category_id FROM Categories WHERE name = N'Thịt cá'), N'Thịt Bò Mỹ Nhập Khẩu (500g)', N'Thịt bò mềm, vân mỡ đều, tiêu chuẩn USDA. Cực kỳ ngon khi nướng hoặc làm bít tết.', 250000, 40, N'https://images.unsplash.com/photo-1603048297172-c92544798d5e?w=600', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Thịt cá'), N'Cá hồi Na Uy phi lê (250g)', N'Cá hồi tươi nhập khẩu bằng đường hàng không. Giàu Omega 3.', 180000, 25, N'https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=600', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Thịt cá'), N'Thịt ba rọi heo (500g)', N'Thịt ba chỉ heo sạch, tỉ lệ nạc mỡ hoàn hảo.', 85000, 80, N'https://file.hstatic.net/1000389344/file/thit_ba_chi_heo_eb7a9c3792034e3ea2a2305a46cbdf68_grande.jpg', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Thịt cá'), N'Gà ta thả vườn (Nguyên con ~1.5kg)', N'Gà ta thịt chắc, da giòn, dai ngon.', 190000, 30, N'https://thucphamhalong.com/wp-content/uploads/2021/08/ga-ta-nguyen-con.jpg', N'active');
+((SELECT category_id FROM Categories WHERE name = N'Thịt cá'), N'Thịt Bò Mỹ Nhập Khẩu (500g)', N'Thịt bò mềm, vân mỡ đều, tiêu chuẩn USDA. Cực kỳ ngon khi nướng hoặc làm bít tết.', 250000, 40, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSydS1O0c0jhidAZpygvEUor5H0WsHuTQRNHA&s', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Thịt cá'), N'Cá hồi Na Uy phi lê (250g)', N'Cá hồi tươi nhập khẩu bằng đường hàng không. Giàu Omega 3.', 180000, 25, N'https://product.hstatic.net/1000301274/product/_10100002__ca_hoi_tuoi_nhap_khau_fillet-6_5abdba3a2be646a29306dc27264adea0.png', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Thịt cá'), N'Thịt ba rọi heo (500g)', N'Thịt ba chỉ heo sạch, tỉ lệ nạc mỡ hoàn hảo.', 85000, 80, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNUp_T_Wq0aY3vncvoR5PdSjZqEDFL3ZngBw&s', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Thịt cá'), N'Gà ta thả vườn (Nguyên con ~1.5kg)', N'Gà ta thịt chắc, da giòn, dai ngon.', 190000, 30, N'https://cdn.giaoducthoidai.vn/images/b4508baace0d9fe4c8bbd296e259642ef5dbe3681230d084c969cf7840e65716a973695246c89c42ec3ec98b29d618db9f32cff4fc2ca36202679bd6192d6869/meochongangon1601_RJUH.jpg', N'active');
 
 -- Category 4: Sữa & Trứng
 INSERT INTO Products (category_id, name, description, price, stock_quantity, thumbnail_url, status) VALUES
-((SELECT category_id FROM Categories WHERE name = N'Sữa & Trứng'), N'Sữa tươi TH True Milk 1L', N'Sữa tươi tiệt trùng nguyên chất 100%. Bổ sung canxi và vitamin tự nhiên.', 36000, 200, N'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Sữa & Trứng'), N'Trứng gà tươi Ba Huân (Hộp 10 quả)', N'Trứng gà công nghiệp, lòng đỏ to, đã qua xử lý ozone.', 32000, 150, N'https://cooponline.vn/wp-content/uploads/2021/11/trung-ga-ba-huan-hop-10.jpg', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Sữa & Trứng'), N'Sữa chua Vinamilk có đường (Vỉ 4 hộp)', N'Lên men tự nhiên, tốt cho hệ tiêu hóa.', 25000, 100, N'https://cdn.tgdd.vn/Products/Images/2939/76465/bhx/sua-chua-vinamilk-co-duong-100g-202104081515234509.jpg', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Sữa & Trứng'), N'Phô mai Con Bò Cười (Hộp 8 miếng)', N'Bổ sung Canxi và kẽm, hương vị béo ngậy.', 45000, 80, N'https://cdn.tgdd.vn/Products/Images/2942/76678/bhx/pho-mai-con-bo-cuoi-vi-truyen-thong-112g-8-mieng-202302251021469098.jpg', N'active');
+((SELECT category_id FROM Categories WHERE name = N'Sữa & Trứng'), N'Sữa tươi TH True Milk 1L', N'Sữa tươi tiệt trùng nguyên chất 100%. Bổ sung canxi và vitamin tự nhiên.', 36000, 200, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjJfRz1fzbOoRhT--KBOAJketrUV8uFEqsng&s', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Sữa & Trứng'), N'Trứng gà tươi Ba Huân (Hộp 10 quả)', N'Trứng gà công nghiệp, lòng đỏ to, đã qua xử lý ozone.', 32000, 150, N'https://product.hstatic.net/1000141988/product/trung_ga_tuoi_premium_55_g__10_trunghop___c80402fbaf0e4641945fe68a1c7b1983_master.jpg', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Sữa & Trứng'), N'Sữa chua Vinamilk có đường (Vỉ 4 hộp)', N'Lên men tự nhiên, tốt cho hệ tiêu hóa.', 25000, 100, N'https://product.hstatic.net/200000559893/product/sua-chua-khong-duong-vinamilk-pcv_f4b9075ebb684c6184897e85f8dd5959.jpg', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Sữa & Trứng'), N'Phô mai Con Bò Cười (Hộp 8 miếng)', N'Bổ sung Canxi và kẽm, hương vị béo ngậy.', 45000, 80, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyA6f9do-HzO3YGSFG8kpiygrOseXhVMLOIA&s', N'active');
 
 -- Category 5: Đồ uống
 INSERT INTO Products (category_id, name, description, price, stock_quantity, thumbnail_url, status) VALUES
-((SELECT category_id FROM Categories WHERE name = N'Đồ uống'), N'Nước tinh khiết Aquafina (Chai 500ml)', N'Nước tinh khiết đóng chai tiện lợi.', 5000, 500, N'https://cdn.tgdd.vn/Products/Images/2927/76453/bhx/nuoc-tinh-khiet-aquafina-500ml-202211021539268673.jpg', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Đồ uống'), N'Bia Tiger Thùng 24 Lon (330ml)', N'Bia Tiger mát lạnh, sảng khoái.', 380000, 40, N'https://cdn.tgdd.vn/Products/Images/2282/76483/bhx/thung-24-lon-bia-tiger-330ml-202212211522066538.jpg', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Đồ uống'), N'Nước ngọt Coca-Cola (Chai 1.5L)', N'Giải khát tột đỉnh cùng Coca-Cola.', 22000, 120, N'https://cdn.tgdd.vn/Products/Images/2564/76469/bhx/nuoc-ngot-coca-cola-15-lit-202303031343048995.jpg', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Đồ uống'), N'Nước ép cam Tropicana (Hộp 1L)', N'100% nước cam nguyên chất, giàu vitamin C.', 55000, 60, N'https://cdn.tgdd.vn/Products/Images/2928/76505/bhx/nuoc-ep-cam-tropicana-twister-1-lit-202211041042398517.jpg', N'active');
+((SELECT category_id FROM Categories WHERE name = N'Đồ uống'), N'Nước tinh khiết Aquafina (Chai 500ml)', N'Nước tinh khiết đóng chai tiện lợi.', 5000, 500, N'https://cdn.tgdd.vn//News/1478714//top-10-loai-nuoc-tinh-khiet-tot-nhat-hien-nay-18-845x450.jpg', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Đồ uống'), N'Bia Tiger Thùng 24 Lon (330ml)', N'Bia Tiger mát lạnh, sảng khoái.', 380000, 40, N'https://product.hstatic.net/200000078749/product/tiger_bac_4c1d8d23263e42589d46f33db992cb40_c589407823c346b890a9f72bddf5443a_grande.png', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Đồ uống'), N'Nước ngọt Coca-Cola (Chai 1.5L)', N'Giải khát tột đỉnh cùng Coca-Cola.', 22000, 120, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSlp8xbuRE5gvtCNCbyLl1oL_IUMeQ1UNlIA&s', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Đồ uống'), N'Nước ép cam Tropicana (Hộp 1L)', N'100% nước cam nguyên chất, giàu vitamin C.', 55000, 60, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCpo28NN0AKxO1B6ZOtDUFyrot3BjoAEqPag&s', N'active');
 
 -- Category 6: Gia vị
 INSERT INTO Products (category_id, name, description, price, stock_quantity, thumbnail_url, status) VALUES
-((SELECT category_id FROM Categories WHERE name = N'Gia vị'), N'Nước mắm Nam Ngư (Chai 500ml)', N'Nước mắm nhĩ thơm ngon, đậm đà hương vị Việt.', 42000, 150, N'https://cdn.tgdd.vn/Products/Images/2286/76460/bhx/nuoc-mam-nam-ngu-500ml-202211241551395898.jpg', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Gia vị'), N'Dầu ăn Neptune (Chai 1L)', N'Dầu ăn thượng hạng, tốt cho tim mạch.', 60000, 100, N'https://cdn.tgdd.vn/Products/Images/2288/76463/bhx/dau-an-neptune-light-1-lit-202211081534446979.jpg', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Gia vị'), N'Đường tinh luyện Biên Hòa (Gói 1kg)', N'Đường trắng tinh khiết, hạt mịn.', 28000, 200, N'https://cdn.tgdd.vn/Products/Images/2565/76466/bhx/duong-tinh-luyen-bien-hoa-1kg-202211041048123019.jpg', N'active'),
-((SELECT category_id FROM Categories WHERE name = N'Gia vị'), N'Bột nêm Knorr thịt thăn (Gói 400g)', N'Đậm vị thịt xương hầm, cho món ăn thêm ngon.', 38000, 120, N'https://cdn.tgdd.vn/Products/Images/2289/76459/bhx/hat-nem-knorr-thit-than-xuong-ong-va-tuy-400g-202302251036499878.jpg', N'active');
+((SELECT category_id FROM Categories WHERE name = N'Gia vị'), N'Nước mắm Nam Ngư (Chai 500ml)', N'Nước mắm nhĩ thơm ngon, đậm đà hương vị Việt.', 42000, 150, N'https://cdn.tgdd.vn/Products/Images/2289/79053/bhx/nuoc-mam-nam-ngu-12-do-dam-chai-900ml-202304131744430602.jpg', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Gia vị'), N'Dầu ăn Neptune (Chai 1L)', N'Dầu ăn thượng hạng, tốt cho tim mạch.', 60000, 100, N'https://brgshopping.vn/web/image/product.template/2589/image?unique=d6a6b11', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Gia vị'), N'Đường tinh luyện Biên Hòa (Gói 1kg)', N'Đường trắng tinh khiết, hạt mịn.', 28000, 200, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_gs9wDae_GAmbOoyA14uTK5vHgvyd6JGt8Q&s', N'active'),
+((SELECT category_id FROM Categories WHERE name = N'Gia vị'), N'Bột nêm Knorr thịt thăn (Gói 400g)', N'Đậm vị thịt xương hầm, cho món ăn thêm ngon.', 38000, 120, N'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8jjqOqXv8cabqiqaA9U942CoHu9H2qs_V-Q&s', N'active');
 GO
 
 
