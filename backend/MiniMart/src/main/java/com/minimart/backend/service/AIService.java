@@ -158,4 +158,23 @@ public class AIService {
             return "Đầu bếp AI đang bận nấu ăn, vui lòng thử lại sau nhé!";
         }
     }
+
+    public String generateProductMarketingContent(String productName) {
+        String prompt = "Đóng vai một chuyên gia Copywriter & Marketing thực chiến cho siêu thị thực phẩm sạch MiniMart.\n" +
+                "Nhiệm vụ: Viết một đoạn mô tả sản phẩm (khoảng 3-4 câu, 50-70 từ) để chốt sale ngay lập tức cho sản phẩm: [" + productName + "].\n" +
+                "Yêu cầu khắt khe:\n" +
+                "1. Câu đầu tiên: Hook (Thu hút sự chú ý, đánh vào điểm nổi bật nhất như độ tươi ngon, nguồn gốc).\n" +
+                "2. Câu thứ hai: Lợi ích/Giá trị (Sản phẩm này giúp ích gì cho bữa ăn gia đình, sức khỏe, tiện lợi ra sao).\n" +
+                "3. Câu cuối cùng: Call to action (Kêu gọi mua ngay, nhấn mạnh sự an tâm).\n" +
+                "4. Giọng văn: Gần gũi, thấu hiểu tâm lý người nội trợ, kích thích vị giác.\n" +
+                "5. FORMAT: Trả về ĐÚNG MỘT đoạn văn bản thuần túy, tuyệt đối KHÔNG DÙNG dấu *, #, in đậm, hay tiêu đề.";
+
+        try {
+            return geminiClient.models.generateContent("gemini-2.5-flash", prompt, null).text();
+        } catch (Exception e) {
+            System.err.println("❌ LỖI GỌI AI (Mô tả sản phẩm): " + e.getMessage());
+            e.printStackTrace();
+            return "Sản phẩm [" + productName + "] tươi ngon mỗi ngày, đảm bảo vệ sinh an toàn thực phẩm. Đặt mua ngay tại MiniMart để nhận giá ưu đãi!";
+        }
+    }
 }

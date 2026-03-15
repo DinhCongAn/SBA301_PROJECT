@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Products")
@@ -29,8 +31,8 @@ public class Product {
     @Column(name = "stock_quantity", nullable = false)
     private Integer stockQuantity;
 
-    @Column(name = "thumbnail_url")
-    private String thumbnailUrl; // Ánh xạ cột thumbnail_url
+    @Column(name = "thumbnail_url", columnDefinition = "VARCHAR(MAX)")
+    private String thumbnailUrl;
 
     @Column(nullable = false)
     private String status;
@@ -40,4 +42,7 @@ public class Product {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImage> images = new ArrayList<>();
 }
