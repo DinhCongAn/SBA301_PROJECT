@@ -52,3 +52,8 @@ export const fetchAdminPromotions = (page = 0, size = 10, search = '', type = 'A
 export const saveAdminPromotion = (data) => axios.post(`${API_URL}/promotions`, data);
 export const toggleAdminPromotion = (id) => axios.put(`${API_URL}/promotions/${id}/toggle`);
 export const deleteAdminPromotion = (id) => axios.delete(`${API_URL}/promotions/${id}`);
+
+// --- QUẢN LÝ NGƯỜI DÙNG ---
+export const fetchAdminUsers = (page = 0, size = 10, search = '') => axios.get(`${API_URL}/users?page=${page}&size=${size}&search=${search}`);
+export const updateUserRole = (id, role) => axios.put(`${API_URL}/users/${id}/role`, { role });
+export const toggleUserLock = (id) => axios.put(`${API_URL}/users/${id}/toggle-lock`);

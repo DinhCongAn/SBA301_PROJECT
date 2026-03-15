@@ -5,49 +5,54 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users") // Tên bảng trong database
-@Data // Lombok tự động tạo Getter, Setter
+@Table(name = "Users")
+@Data
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Tự động tăng ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "username", nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, unique = true, length = 100)
+    private String email;
+
+    @Column(length = 20)
+    private String phone;
 
     @Column(name = "full_name", length = 100)
     private String fullName;
 
-    @Column(name = "email", nullable = false, unique = true, length = 100)
-    private String email;
+    // 🚀 BỔ SUNG 2 TRƯỜNG MỚI
+    @Column(name = "avatar_url", columnDefinition = "NVARCHAR(MAX)")
+    private String avatarUrl;
 
-    @Column(name = "phone", length = 20)
-    private String phone;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
 
-    @Column(name = "role", nullable = false, length = 20)
-    private String role = "CUSTOMER"; // Mặc định là khách hàng
+    @Column(nullable = false, length = 20)
+    private String role = "USER"; // "ADMIN" hoặc "USER"
 
+    // --- TỰ ĐỘNG QUẢN LÝ NGÀY THÁNG ---
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "avatar_url", columnDefinition = "VARCHAR(MAX)")
-    private String avatarUrl;
-
-    // Tự động set thời gian khi tạo mới tài khoản
+    // Hàm này tự động chạy TRƯỚC KHI lưu User mới vào CSDL
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
 
-    // Tự động set thời gian khi cập nhật tài khoản
+    // Hàm này tự động chạy TRƯỚC KHI cập nhật User (đổi mật khẩu, sửa tên...)
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
