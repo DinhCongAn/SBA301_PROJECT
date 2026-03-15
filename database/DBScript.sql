@@ -315,6 +315,10 @@ ALTER TABLE Addresses ADD receiver_name NVARCHAR(100) DEFAULT 'Khach Hang' WITH 
 ALTER TABLE Addresses ADD phone VARCHAR(20) DEFAULT '0123456789' WITH VALUES;
 ALTER TABLE products ALTER COLUMN thumbnail_url VARCHAR(MAX);
 ALTER TABLE product_images ALTER COLUMN image_url VARCHAR(MAX);
+-- Thêm cột status nếu chưa có
+ALTER TABLE categories ADD status VARCHAR(20) DEFAULT 'active';
+-- Nới rộng cột ảnh để lưu Base64
+ALTER TABLE categories ALTER COLUMN image_url VARCHAR(MAX);
 --------------------------------------------------------------------------------
 -- ✅ THÔNG BÁO HOÀN TẤT
 --------------------------------------------------------------------------------
