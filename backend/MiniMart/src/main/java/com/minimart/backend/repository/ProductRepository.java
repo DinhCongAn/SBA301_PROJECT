@@ -50,6 +50,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             @Param("status") String status,
             Pageable pageable);
 
+    long countByCategory_CategoryId(Long categoryId);
+
     // Kiểm tra xem tên đã tồn tại chưa
     boolean existsByName(String name);
 
