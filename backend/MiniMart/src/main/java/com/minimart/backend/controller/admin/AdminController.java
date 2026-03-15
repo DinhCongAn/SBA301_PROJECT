@@ -1,4 +1,4 @@
-package com.minimart.backend.admin;
+package com.minimart.backend.controller.admin;
 
 import com.minimart.backend.service.AdminDashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
