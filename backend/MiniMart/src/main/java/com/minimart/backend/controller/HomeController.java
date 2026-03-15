@@ -20,7 +20,7 @@ public class HomeController {
     public HomeResponse getHomeData() {
         return new HomeResponse(
                 sliderRepo.findByStatusOrderByOrderNumberAsc("active"),
-                categoryRepo.findAll(),
+                categoryRepo.findByStatus("ACTIVE"),
                 productRepo.findTop16ByStatusOrderByProductIdDesc("active")
         );
     }
