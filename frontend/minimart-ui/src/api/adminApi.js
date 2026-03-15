@@ -57,3 +57,12 @@ export const deleteAdminPromotion = (id) => axios.delete(`${API_URL}/promotions/
 export const fetchAdminUsers = (page = 0, size = 10, search = '') => axios.get(`${API_URL}/users?page=${page}&size=${size}&search=${search}`);
 export const updateUserRole = (id, role) => axios.put(`${API_URL}/users/${id}/role`, { role });
 export const toggleUserLock = (id) => axios.put(`${API_URL}/users/${id}/toggle-lock`);
+
+// --- QUẢN LÝ SLIDER (BANNER) ---
+export const fetchAdminSliders = (search = '', status = 'ALL') => {
+    let url = `${API_URL}/sliders?status=${status}`;
+    if (search) url += `&search=${search}`;
+    return axios.get(url);
+};
+export const saveAdminSlider = (data) => axios.post(`${API_URL}/sliders`, data);
+export const deleteAdminSlider = (id) => axios.delete(`${API_URL}/sliders/${id}`);

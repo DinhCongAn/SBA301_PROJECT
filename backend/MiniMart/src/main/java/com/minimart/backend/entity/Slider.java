@@ -9,18 +9,21 @@ import lombok.Data;
 public class Slider {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // Trong DB dùng INT
+    @Column(name = "id")
+    private Long id;
 
-    @Column(name = "image_url", nullable = false)
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "image_url", columnDefinition = "NVARCHAR(MAX)")
     private String imageUrl;
 
-    @Column(name = "link_url")
+    @Column(name = "link_url", columnDefinition = "NVARCHAR(MAX)")
     private String linkUrl;
 
-    private String title;
-    private String description;
-    private String status;
+    @Column(name = "order_number", nullable = false)
+    private Integer orderNumber = 0;
 
-    @Column(name = "order_number")
-    private Integer orderNumber;
+    @Column(name = "status")
+    private String status = "active";
 }

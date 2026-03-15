@@ -29,7 +29,6 @@ public class User {
     @Column(name = "full_name", length = 100)
     private String fullName;
 
-    // 🚀 BỔ SUNG 2 TRƯỜNG MỚI
     @Column(name = "avatar_url", columnDefinition = "NVARCHAR(MAX)")
     private String avatarUrl;
 
@@ -39,20 +38,17 @@ public class User {
     @Column(nullable = false, length = 20)
     private String role = "USER"; // "ADMIN" hoặc "USER"
 
-    // --- TỰ ĐỘNG QUẢN LÝ NGÀY THÁNG ---
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Hàm này tự động chạy TRƯỚC KHI lưu User mới vào CSDL
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
 
-    // Hàm này tự động chạy TRƯỚC KHI cập nhật User (đổi mật khẩu, sửa tên...)
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
