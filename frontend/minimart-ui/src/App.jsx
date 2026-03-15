@@ -17,6 +17,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import OrderManagement from "./pages/admin/OrderManagement";
 import ProductManagement from "./pages/admin/ProductManagement";
+import CategoryManagement from "./pages/admin/CategoryManagement";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -59,6 +60,8 @@ function App() {
           
           {/* Khi URL là "/admin/products", nó nhúng ProductManagement vào <Outlet /> */}
           <Route path="products" element={<ProductManagement />} />
+
+          <Route path="categories" element={<CategoryManagement />} />
           
           {/* Tương tự cho đơn hàng */}
           <Route path="orders" element={<OrderManagement />} />
