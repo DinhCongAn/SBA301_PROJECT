@@ -18,16 +18,25 @@ export const generateAiProductDesc = (productName) => axios.post(`${API_URL}/pro
 // ==========================================
 // 2. QUẢN LÝ DANH MỤC (CATEGORIES)
 // ==========================================
-// Dùng cho bảng Quản lý Danh mục (Có phân trang)
 export const fetchAdminCategories = (page = 0, size = 10, search = '', status = 'active') => {
     let url = `${API_URL}/categories?page=${page}&size=${size}&status=${status}`;
     if (search) url += `&search=${search}`;
     return axios.get(url);
 };
 
-// Dùng cho Dropdown chọn danh mục trong Form Sản phẩm (Lấy tất cả mảng)
 export const fetchAllCategoriesSimple = () => axios.get(`${API_URL}/categories/all`);
 
 export const saveAdminCategory = (formData) => axios.post(`${API_URL}/categories`, formData, { headers: { 'Content-Type': 'multipart/form-data' }});
 export const deleteAdminCategory = (id) => axios.delete(`${API_URL}/categories/${id}`);
 export const restoreAdminCategory = (id) => axios.put(`${API_URL}/categories/${id}/restore`);
+
+// --- QUẢN LÝ ĐƠN HÀNG ---
+export const fetchAdminOrders = (page = 0, size = 10, search = '', status = 'ALL', payment = 'ALL', startDate = '', endDate = '') => {
+    let url = `${API_URL}/orders?page=${page}&size=${size}&status=${status}&paymentMethod=${payment}`;
+    if (search) url += `&search=${search}`;
+    if (startDate) url += `&startDate=${startDate}`;
+    if (endDate) url += `&endDate=${endDate}`;
+    return axios.get(url);
+};
+
+export const updateAdminOrderStatus = (id, status) => axios.put(`${API_URL}/orders/${id}/status`, { status });

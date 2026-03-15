@@ -215,8 +215,11 @@ const ProductManagement = () => {
 
                             <div className="relative">
                                 <div className="flex justify-between items-center mb-2">
-                                    <label className="text-sm font-bold">Mô tả</label>
-                                    <button type="button" onClick={handleGenerateAI} disabled={isAiLoading} className="text-xs bg-emerald-100 text-emerald-800 px-3 py-1.5 rounded-lg font-bold"><i className="fas fa-magic"></i> AI Viết</button>
+                                    <label className="text-sm font-bold text-gray-700">Mô tả sản phẩm</label>
+                                    <button type="button" onClick={handleGenerateAI} disabled={isAiLoading} className="text-xs bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 px-4 py-1.5 rounded-lg font-bold border border-emerald-200 hover:shadow-md transition flex items-center">
+                                        {isAiLoading ? <i className="fas fa-spinner fa-spin mr-1.5"></i> : <span className="mr-1.5 text-base">✨</span>}
+                                        {isAiLoading ? "AI đang suy nghĩ..." : "Viết tự động bằng AI"}
+                                    </button>
                                 </div>
                                 <textarea rows="3" required className="w-full border rounded-xl p-4 outline-none focus:border-emerald-500 text-sm" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}></textarea>
                             </div>

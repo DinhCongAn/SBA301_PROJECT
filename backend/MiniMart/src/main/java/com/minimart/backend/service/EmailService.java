@@ -90,4 +90,45 @@ public class EmailService {
             System.err.println("Lỗi gửi mail cập nhật trạng thái: " + e.getMessage());
         }
     }
+
+    @Async
+    public void sendOrderStatusEmail(String toEmail, String orderCode, String customerName, String status) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(toEmail);
+            helper.setSubject("Cập nhật trạng thái đơn hàng #" + orderCode + " - MiniMart");
+
+            // Viết nội dung Mail dạng HTML cho đẹp
+            String htmlContent = "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 10px; overflow: hidden;'>"
+                    + "<div style='background-color: #10B981; color: white; padding: 20px; text-align: center;'>"
+                    + "<h2>Cập nhật Đơn hàng MiniMart</h2>"
+                    + "</div>"
+                    + "<div style='padding: 20px; color: #333;'>"
+                    + "<p>Chào <b>" + customerName + "</b>,</p>"
+                    + "<p>Đơn hàng <b>#" + orderCode + "</b> của bạn vừa được cập nhật trạng thái mới:</p>"
+                    + "<h3 style='color: #10B981; text-align: center; border: 1px dashed #10B981; padding: 10px; border-radius: 5px;'>" + translateStatus(status) + "</h3>"
+                    + "<p>Bạn có thể đăng nhập vào website để theo dõi chi tiết tiến trình giao hàng.</p>"
+                    + "<p>Cảm ơn bạn đã tin tưởng và mua sắm tại MiniMart!</p>"
+                    + "</div>"
+                    + "</div>";
+
+            helper.setText(htmlContent, true);
+            mailSender.send(message);
+        } catch (Exception e) {
+            System.err.println("Lỗi gửi mail: " + e.getMessage());
+        }
+    }
+
+
+    private String translateStatus(String status) {
+        return switch (status.toUpperCase()) {
+            case "PENDING" -> "Chờ xác nhận";
+            case "DELIVERING" -> "Đang giao hàng";
+            case "DELIVERED" -> "Đã hoàn thành";
+            case "CANCELLED" -> "Đã hủy";
+            default -> status;
+        };
+    }
 }
