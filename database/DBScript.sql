@@ -88,7 +88,7 @@ CREATE TABLE Products (
     description NVARCHAR(MAX) NULL,                      -- Mô tả chi tiết
     price DECIMAL(10, 2) NOT NULL,                       -- Giá bán
     stock_quantity INT NOT NULL DEFAULT 0,               -- Tồn kho
-    thumbnail_url NVARCHAR(500) NULL,                    -- Ảnh thumbnail
+    thumbnail_url VARCHAR(MAX) NULL,                    -- Ảnh thumbnail
     status NVARCHAR(20) NOT NULL DEFAULT 'active',       -- Trạng thái: 'active' hoặc 'inactive'
     created_at DATETIME2 DEFAULT GETDATE(),              -- Ngày tạo
     updated_at DATETIME2 NULL,                           -- Ngày cập nhật
@@ -313,7 +313,8 @@ ALTER TABLE users ADD avatar_url VARCHAR(MAX);
 -- Thêm cột Họ Tên và Số điện thoại vào bảng Addresses 
 ALTER TABLE Addresses ADD receiver_name NVARCHAR(100) DEFAULT 'Khach Hang' WITH VALUES;
 ALTER TABLE Addresses ADD phone VARCHAR(20) DEFAULT '0123456789' WITH VALUES;
-
+ALTER TABLE products ALTER COLUMN thumbnail_url VARCHAR(MAX);
+ALTER TABLE product_images ALTER COLUMN image_url VARCHAR(MAX);
 --------------------------------------------------------------------------------
 -- ✅ THÔNG BÁO HOÀN TẤT
 --------------------------------------------------------------------------------
