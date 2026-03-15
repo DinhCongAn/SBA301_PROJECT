@@ -55,3 +55,9 @@ export const addReviewApi = async (productId, reviewData) => {
     const res = await axios.post(`http://localhost:8080/api/products/${productId}/reviews`, reviewData);
     return res.data;
 };
+
+// Thêm hàm lấy sản phẩm tương tự
+export const fetchSimilarProducts = async (id) => {
+    const response = await axios.get(`http://localhost:8080/api/products/${id}/similar`);
+    return response.data;
+};

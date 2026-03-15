@@ -13,7 +13,10 @@ import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminLayout from "./layouts/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import OrderManagement from "./pages/admin/OrderManagement";
+import ProductManagement from "./pages/admin/ProductManagement";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -45,6 +48,22 @@ function App() {
                 <Route path="checkout" element={<Checkout />} />
                 <Route path="orders" element={<Orders />} />
                 <Route path="/admin" element={<AdminDashboard />} />
+
+                {/* =============================== */}
+        {/* ROUTES DÀNH CHO ADMIN           */}
+        {/* =============================== */}
+        <Route path="/admin" element={<AdminLayout />}>
+          
+          {/* Khi URL là "/admin", nó sẽ nhúng AdminDashboard vào chỗ <Outlet /> */}
+          <Route index element={<AdminDashboard />} /> 
+          
+          {/* Khi URL là "/admin/products", nó nhúng ProductManagement vào <Outlet /> */}
+          <Route path="products" element={<ProductManagement />} />
+          
+          {/* Tương tự cho đơn hàng */}
+          <Route path="orders" element={<OrderManagement />} />
+          
+        </Route>
                 
             </Route>
 
