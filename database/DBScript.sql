@@ -319,6 +319,7 @@ ALTER TABLE product_images ALTER COLUMN image_url VARCHAR(MAX);
 ALTER TABLE categories ADD status VARCHAR(20) DEFAULT 'active';
 -- Nới rộng cột ảnh để lưu Base64
 ALTER TABLE categories ALTER COLUMN image_url VARCHAR(MAX);
+UPDATE categories SET status = 'active' WHERE status IS NULL;
 --------------------------------------------------------------------------------
 -- ✅ THÔNG BÁO HOÀN TẤT
 --------------------------------------------------------------------------------
