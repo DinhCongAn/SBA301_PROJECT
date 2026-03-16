@@ -1,7 +1,15 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+// --- BẢO VỆ ROUTE ---
+import AdminRoute from "./components/AdminRoute";
+
+// --- LAYOUTS ---
 import CustomerLayout from "./layouts/CustomerLayout";
+import AdminLayout from "./layouts/AdminLayout";
+
+// --- CUSTOMER PAGES ---
 import Home from "./pages/Home";
 import ProductList from "./pages/ProductList";
 import Login from "./pages/Login";
@@ -13,7 +21,8 @@ import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
-import AdminLayout from "./layouts/AdminLayout";
+
+// --- ADMIN PAGES ---
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import OrderManagement from "./pages/admin/OrderManagement";
 import ProductManagement from "./pages/admin/ProductManagement";
@@ -30,50 +39,39 @@ function App() {
         <BrowserRouter>
           <Routes>
             
-            {/* TẤT CẢ CÁC TRANG ĐỀU SỬ DỤNG LAYOUT CÓ HEADER & FOOTER */}
+            {/* ============================================================== */}
+            {/* KHU VỰC 1: KHÁCH HÀNG (Ai cũng vào được, Dùng CustomerLayout)  */}
+            {/* ============================================================== */}
             <Route path="/" element={<CustomerLayout />}>
-                
-                {/* Trang mua sắm */}
                 <Route index element={<Home />} />
                 <Route path="products" element={<ProductList />} />
-                
-                {/* Trang xác thực (Đã được nhúng Header/Footer) */}
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
                 <Route path="forgot-password" element={<ForgotPassword />} />
-
-                {/* TÀI KHOẢN CÁ NHÂN */}
                 <Route path="profile" element={<Profile />} />
                 <Route path="address" element={<AddressManagement />} />
-                
-
                 <Route path="product/:id" element={<ProductDetail />} />
                 <Route path="cart" element={<Cart />} />
                 <Route path="checkout" element={<Checkout />} />
                 <Route path="orders" element={<Orders />} />
-                <Route path="/admin" element={<AdminDashboard />} />
+            </Route>
 
-                {/* =============================== */}
-        {/* ROUTES DÀNH CHO ADMIN           */}
-        {/* =============================== */}
-        <Route path="/admin" element={<AdminLayout />}>
-          
-          {/* Khi URL là "/admin", nó sẽ nhúng AdminDashboard vào chỗ <Outlet /> */}
-          <Route index element={<AdminDashboard />} /> 
-          
-          {/* Khi URL là "/admin/products", nó nhúng ProductManagement vào <Outlet /> */}
-          <Route path="products" element={<ProductManagement />} />
 
-          <Route path="categories" element={<CategoryManagement />} />
-          
-          {/* Tương tự cho đơn hàng */}
-          <Route path="orders" element={<OrderManagement />} />
-          <Route path="promotions" element={<PromotionManagement />} />
-          <Route path="users" element={<UserManagement />} />
-          <Route path="sliders" element={<SliderManagement />} />
-          
-        </Route>
-                
+            {/* ============================================================== */}
+            {/* KHU VỰC 2: QUẢN TRỊ VIÊN (Bị khóa bởi AdminRoute)              */}
+            {/* ============================================================== */}
+            <Route element={<AdminRoute />}>
+                {/* Chỉ khi vượt qua AdminRoute, mới được render AdminLayout */}
+                <Route path="/admin" element={<AdminLayout />}>                                 
+                    <Route index element={<Navigate to="dashboard" replace />} />                           
+                    <Route path="dashboard" element={<AdminDashboard />} />                   
+                    <Route path="products" element={<ProductManagement />} />
+                    <Route path="categories" element={<CategoryManagement />} />
+                    <Route path="orders" element={<OrderManagement />} />
+                    <Route path="promotions" element={<PromotionManagement />} />
+                    <Route path="users" element={<UserManagement />} />
+                    <Route path="sliders" element={<SliderManagement />} />
+                </Route>
             </Route>
 
           </Routes>
