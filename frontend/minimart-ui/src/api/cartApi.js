@@ -1,9 +1,11 @@
-import axios from "axios";
+import axiosClient from './axiosClient';
 
-const API_URL = "http://localhost:8080/api/cart";
+export const getCart = (userId) => axiosClient.get(`/cart/${userId}`);
 
-export const getCart = async (userId) => await axios.get(`${API_URL}/${userId}`);
-export const addToCartApi = async (userId, productId, quantity) => await axios.post(`${API_URL}/${userId}/add`, { productId, quantity });
-export const updateCartItemApi = async (userId, productId, quantity) => await axios.put(`${API_URL}/${userId}/update`, { productId, quantity });
-export const removeCartItem = async (cartItemId) => await axios.delete(`${API_URL}/${cartItemId}`);
-export const getAiChefRecipe = async (productNames) => await axios.post(`${API_URL}/ai-chef`, productNames);
+export const addToCartApi = (userId, productId, quantity) => axiosClient.post(`/cart/${userId}/add`, { productId, quantity });
+
+export const updateCartItemApi = (userId, productId, quantity) => axiosClient.put(`/cart/${userId}/update`, { productId, quantity });
+
+export const removeCartItem = (cartItemId) => axiosClient.delete(`/cart/${cartItemId}`);
+
+export const getAiChefRecipe = (productNames) => axiosClient.post(`/cart/ai-chef`, productNames);

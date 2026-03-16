@@ -1,8 +1,8 @@
-import axios from "axios";
+import axiosClient from './axiosClient';
 
 export const sendChatMessage = async (message) => {
     try {
-        const response = await axios.post("http://localhost:8080/api/ai/chat", { message });
+        const response = await axiosClient.post('/ai/chat', { message });
         return response.data.reply;
     } catch (error) {
         console.error("Lỗi kết nối AI:", error);

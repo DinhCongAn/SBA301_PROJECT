@@ -1,68 +1,75 @@
-import axios from "axios";
-const API_URL = "http://localhost:8080/api/admin";
+import axiosClient from './axiosClient';
 
 // ==========================================
 // 1. QUẢN LÝ SẢN PHẨM (PRODUCTS)
 // ==========================================
 export const fetchAdminProducts = (page = 0, size = 10, search = '', categoryId = '', sort = 'NEWEST', status = 'active') => {
-    let url = `${API_URL}/products?page=${page}&size=${size}&sortMode=${sort}&status=${status}`;
+    let url = `/admin/products?page=${page}&size=${size}&sortMode=${sort}&status=${status}`;
     if (search) url += `&search=${search}`;
     if (categoryId && categoryId !== 'ALL') url += `&categoryId=${categoryId}`;
-    return axios.get(url);
+    return axiosClient.get(url);
 };
-export const saveAdminProduct = (formData) => axios.post(`${API_URL}/products`, formData, { headers: { 'Content-Type': 'multipart/form-data' }});
-export const deleteAdminProduct = (id) => axios.delete(`${API_URL}/products/${id}`);
-export const restoreAdminProduct = (id) => axios.put(`${API_URL}/products/${id}/restore`);
-export const generateAiProductDesc = (productName) => axios.post(`${API_URL}/products/generate-ai-desc`, { productName });
+export const saveAdminProduct = (formData) => axiosClient.post(`/admin/products`, formData, { headers: { 'Content-Type': 'multipart/form-data' }});
+export const deleteAdminProduct = (id) => axiosClient.delete(`/admin/products/${id}`);
+export const restoreAdminProduct = (id) => axiosClient.put(`/admin/products/${id}/restore`);
+export const generateAiProductDesc = (productName) => axiosClient.post(`/admin/products/generate-ai-desc`, { productName });
 
 // ==========================================
 // 2. QUẢN LÝ DANH MỤC (CATEGORIES)
 // ==========================================
 export const fetchAdminCategories = (page = 0, size = 10, search = '', status = 'active') => {
-    let url = `${API_URL}/categories?page=${page}&size=${size}&status=${status}`;
+    let url = `/admin/categories?page=${page}&size=${size}&status=${status}`;
     if (search) url += `&search=${search}`;
-    return axios.get(url);
+    return axiosClient.get(url);
 };
 
-export const fetchAllCategoriesSimple = () => axios.get(`${API_URL}/categories/all`);
+export const fetchAllCategoriesSimple = () => axiosClient.get(`/admin/categories/all`);
 
-export const saveAdminCategory = (formData) => axios.post(`${API_URL}/categories`, formData, { headers: { 'Content-Type': 'multipart/form-data' }});
-export const deleteAdminCategory = (id) => axios.delete(`${API_URL}/categories/${id}`);
-export const restoreAdminCategory = (id) => axios.put(`${API_URL}/categories/${id}/restore`);
+export const saveAdminCategory = (formData) => axiosClient.post(`/admin/categories`, formData, { headers: { 'Content-Type': 'multipart/form-data' }});
+export const deleteAdminCategory = (id) => axiosClient.delete(`/admin/categories/${id}`);
+export const restoreAdminCategory = (id) => axiosClient.put(`/admin/categories/${id}/restore`);
 
-// --- QUẢN LÝ ĐƠN HÀNG ---
+// ==========================================
+// 3. QUẢN LÝ ĐƠN HÀNG (ORDERS)
+// ==========================================
 export const fetchAdminOrders = (page = 0, size = 10, search = '', status = 'ALL', payment = 'ALL', startDate = '', endDate = '') => {
-    let url = `${API_URL}/orders?page=${page}&size=${size}&status=${status}&paymentMethod=${payment}`;
+    let url = `/admin/orders?page=${page}&size=${size}&status=${status}&paymentMethod=${payment}`;
     if (search) url += `&search=${search}`;
     if (startDate) url += `&startDate=${startDate}`;
     if (endDate) url += `&endDate=${endDate}`;
-    return axios.get(url);
+    return axiosClient.get(url);
 };
 
-export const updateAdminOrderStatus = (id, status) => axios.put(`${API_URL}/orders/${id}/status`, { status });
+export const updateAdminOrderStatus = (id, status) => axiosClient.put(`/admin/orders/${id}/status`, { status });
 
-// --- QUẢN LÝ KHUYẾN MÃI ---
+// ==========================================
+// 4. QUẢN LÝ KHUYẾN MÃI (PROMOTIONS)
+// ==========================================
 export const fetchAdminPromotions = (page = 0, size = 10, search = '', type = 'ALL', active = '') => {
-    let url = `${API_URL}/promotions?page=${page}&size=${size}&type=${type}`;
+    let url = `/admin/promotions?page=${page}&size=${size}&type=${type}`;
     if (search) url += `&search=${search}`;
     if (active !== '') url += `&active=${active}`; // Truyền 'true' hoặc 'false'
-    return axios.get(url);
+    return axiosClient.get(url);
 };
 
-export const saveAdminPromotion = (data) => axios.post(`${API_URL}/promotions`, data);
-export const toggleAdminPromotion = (id) => axios.put(`${API_URL}/promotions/${id}/toggle`);
-export const deleteAdminPromotion = (id) => axios.delete(`${API_URL}/promotions/${id}`);
+export const saveAdminPromotion = (data) => axiosClient.post(`/admin/promotions`, data);
+export const toggleAdminPromotion = (id) => axiosClient.put(`/admin/promotions/${id}/toggle`);
+export const deleteAdminPromotion = (id) => axiosClient.delete(`/admin/promotions/${id}`);
 
-// --- QUẢN LÝ NGƯỜI DÙNG ---
-export const fetchAdminUsers = (page = 0, size = 10, search = '') => axios.get(`${API_URL}/users?page=${page}&size=${size}&search=${search}`);
-export const updateUserRole = (id, role) => axios.put(`${API_URL}/users/${id}/role`, { role });
-export const toggleUserLock = (id) => axios.put(`${API_URL}/users/${id}/toggle-lock`);
+// ==========================================
+// 5. QUẢN LÝ NGƯỜI DÙNG (USERS)
+// ==========================================
+export const fetchAdminUsers = (page = 0, size = 10, search = '') => axiosClient.get(`/admin/users?page=${page}&size=${size}&search=${search}`);
+export const updateUserRole = (id, role) => axiosClient.put(`/admin/users/${id}/role`, { role });
+export const toggleUserLock = (id) => axiosClient.put(`/admin/users/${id}/toggle-lock`);
 
-// --- QUẢN LÝ SLIDER (BANNER) ---
+// ==========================================
+// 6. QUẢN LÝ SLIDER (BANNER)
+// ==========================================
 export const fetchAdminSliders = (search = '', status = 'ALL') => {
-    let url = `${API_URL}/sliders?status=${status}`;
+    let url = `/admin/sliders?status=${status}`;
     if (search) url += `&search=${search}`;
-    return axios.get(url);
+    return axiosClient.get(url);
 };
-export const saveAdminSlider = (data) => axios.post(`${API_URL}/sliders`, data);
-export const deleteAdminSlider = (id) => axios.delete(`${API_URL}/sliders/${id}`);
+export const saveAdminSlider = (data) => axiosClient.post(`/admin/sliders`, data);
+export const deleteAdminSlider = (id) => axiosClient.delete(`/admin/sliders/${id}`);

@@ -1,19 +1,11 @@
-import axios from "axios";
+import axiosClient from './axiosClient';
 
-const API_URL = "http://localhost:8080/api/orders";
+export const applyPromoCode = (code, total) => axiosClient.post('/orders/apply-promo', { code, total });
 
-export const applyPromoCode = async (code, total) => {
-    return await axios.post(`${API_URL}/apply-promo`, { code, total });
-};
+export const placeOrderApi = (orderPayload) => axiosClient.post('/orders/place-order', orderPayload);
 
-export const placeOrderApi = async (orderPayload) => {
-    return await axios.post(`${API_URL}/place-order`, orderPayload);
-};
+export const getUserOrders = (userId) => axiosClient.get(`/orders/user/${userId}`);
 
-export const getUserOrders = async (userId) => await axios.get(`${API_URL}/user/${userId}`);
-export const getOrderItems = async (orderId) => await axios.get(`${API_URL}/${orderId}/items`);
+export const getOrderItems = (orderId) => axiosClient.get(`/orders/${orderId}/items`);
 
-// Hủy đơn hàng
-export const cancelOrderApi = async (orderId, userId) => {
-    return await axios.put(`${API_URL}/${orderId}/cancel?userId=${userId}`);
-};
+export const cancelOrderApi = (orderId, userId) => axiosClient.put(`/orders/${orderId}/cancel?userId=${userId}`);

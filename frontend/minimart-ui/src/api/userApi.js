@@ -1,11 +1,5 @@
-import axios from "axios";
+import axiosClient from './axiosClient';
 
-const API_URL = "http://localhost:8080/api/users";
+export const updateProfileApi = (userId, profileData) => axiosClient.put(`/users/${userId}/profile`, profileData);
 
-export const updateProfileApi = async (userId, profileData) => {
-    return await axios.put(`${API_URL}/${userId}/profile`, profileData);
-};
-
-export const changePasswordApi = async (userId, passwordData) => {
-    return await axios.put(`${API_URL}/${userId}/change-password`, passwordData);
-};
+export const changePasswordApi = (userId, passwordData) => axiosClient.put(`/users/${userId}/change-password`, passwordData);

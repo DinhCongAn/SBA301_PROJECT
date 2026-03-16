@@ -1,8 +1,9 @@
-import axios from "axios";
+import axiosClient from './axiosClient';
 
-const API_URL = "http://localhost:8080/api/auth";
+export const loginApi = (username, password) => axiosClient.post('/auth/login', { username, password });
 
-export const loginApi = async (username, password) => await axios.post(`${API_URL}/login`, { username, password });
-export const registerApi = async (userData) => await axios.post(`${API_URL}/register`, userData);
-export const resetPasswordApi = async (email, newPassword) => await axios.post(`${API_URL}/reset-password`, { email, newPassword });
-export const googleLoginApi = async (token) => await axios.post(`${API_URL}/google-login`, { token });
+export const registerApi = (userData) => axiosClient.post('/auth/register', userData);
+
+export const resetPasswordApi = (email, newPassword) => axiosClient.post('/auth/reset-password', { email, newPassword });
+
+export const googleLoginApi = (token) => axiosClient.post('/auth/google-login', { token });
