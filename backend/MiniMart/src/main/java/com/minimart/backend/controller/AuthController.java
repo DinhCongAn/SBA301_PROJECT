@@ -4,6 +4,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import com.minimart.backend.config.JwtUtil;
 import com.minimart.backend.dto.ForgotPasswordRequest;
 import com.minimart.backend.dto.LoginRequest;
 import com.minimart.backend.dto.RegisterRequest;
@@ -29,6 +30,8 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -74,6 +77,10 @@ public class AuthController {
             boolean hasPassword = !passwordEncoder.matches("GOOGLE_DEFAULT_PASS", user.getPassword());
             response.put("has_password", hasPassword);
 
+            // Tạo thẻ JWT
+            String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
+            response.put("token", token); // Gửi thẻ về cho ReactJS cất vào localStorage
+
             return ResponseEntity.ok(response);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai tài khoản hoặc mật khẩu!");
@@ -118,6 +125,10 @@ public class AuthController {
                 // Kiểm tra xem đã đổi mật khẩu thật bao giờ chưa
                 boolean hasPassword = !passwordEncoder.matches("GOOGLE_DEFAULT_PASS", user.getPassword());
                 response.put("has_password", hasPassword);
+
+                // Tạo thẻ JWT cho tài khoản Google
+                String jwtToken = jwtUtil.generateToken(user.getUsername(), user.getRole());
+                response.put("token", jwtToken);
 
                 return ResponseEntity.ok(response);
             }
