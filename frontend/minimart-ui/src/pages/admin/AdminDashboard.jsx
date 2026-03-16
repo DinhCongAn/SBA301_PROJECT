@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import axiosClient from '../../api/axiosClient'; 
 
 const AdminDashboard = () => {
     const [data, setData] = useState(null);
@@ -9,8 +9,8 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                // Gọi API lấy dữ liệu thật từ Backend (AdminDashboardService)
-                const res = await axios.get('http://localhost:8080/api/admin/dashboard/stats');
+                // ✅ Gọi API qua axiosClient (Tự động đính kèm Token)
+                const res = await axiosClient.get('/admin/dashboard/stats');
                 setData(res.data);
             } catch (error) {
                 console.error("Lỗi lấy dữ liệu Dashboard", error);
@@ -76,37 +76,37 @@ const AdminDashboard = () => {
                 
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <p className="text-gray-500 text-sm font-medium mb-2">Tổng người dùng</p>
-                    <h3 className="text-3xl font-bold text-gray-900 mb-4">{stats.totalUsers?.toLocaleString()}</h3>
-                    <p className={`text-sm font-medium ${stats.userTrendUp ? 'text-emerald-500' : 'text-red-500'}`}>
-                        <i className={`fas ${stats.userTrendUp ? 'fa-arrow-up' : 'fa-arrow-down'} mr-1`}></i> 
-                        {stats.userTrend} <span className="text-gray-400 font-normal ml-1">tháng này</span>
+                    <h3 className="text-3xl font-bold text-gray-900 mb-4">{stats?.totalUsers?.toLocaleString() || 0}</h3>
+                    <p className={`text-sm font-medium ${stats?.userTrendUp ? 'text-emerald-500' : 'text-red-500'}`}>
+                        <i className={`fas ${stats?.userTrendUp ? 'fa-arrow-up' : 'fa-arrow-down'} mr-1`}></i> 
+                        {stats?.userTrend || '0%'} <span className="text-gray-400 font-normal ml-1">tháng này</span>
                     </p>
                 </div>
 
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <p className="text-gray-500 text-sm font-medium mb-2">Tổng sản phẩm</p>
-                    <h3 className="text-3xl font-bold text-gray-900 mb-4">{stats.totalProducts?.toLocaleString()}</h3>
-                    <p className={`text-sm font-medium ${stats.productTrendUp ? 'text-emerald-500' : 'text-red-500'}`}>
-                        <i className={`fas ${stats.productTrendUp ? 'fa-arrow-up' : 'fa-arrow-down'} mr-1`}></i> 
-                        {stats.productTrend} <span className="text-gray-400 font-normal ml-1">sản phẩm mới</span>
+                    <h3 className="text-3xl font-bold text-gray-900 mb-4">{stats?.totalProducts?.toLocaleString() || 0}</h3>
+                    <p className={`text-sm font-medium ${stats?.productTrendUp ? 'text-emerald-500' : 'text-red-500'}`}>
+                        <i className={`fas ${stats?.productTrendUp ? 'fa-arrow-up' : 'fa-arrow-down'} mr-1`}></i> 
+                        {stats?.productTrend || '0%'} <span className="text-gray-400 font-normal ml-1">sản phẩm mới</span>
                     </p>
                 </div>
 
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <p className="text-gray-500 text-sm font-medium mb-2">Tổng đơn hàng</p>
-                    <h3 className="text-3xl font-bold text-gray-900 mb-4">{stats.totalOrders?.toLocaleString()}</h3>
-                    <p className={`text-sm font-medium ${stats.orderTrendUp ? 'text-emerald-500' : 'text-red-500'}`}>
-                        <i className={`fas ${stats.orderTrendUp ? 'fa-arrow-up' : 'fa-arrow-down'} mr-1`}></i> 
-                        {stats.orderTrend} <span className="text-gray-400 font-normal ml-1">tháng này</span>
+                    <h3 className="text-3xl font-bold text-gray-900 mb-4">{stats?.totalOrders?.toLocaleString() || 0}</h3>
+                    <p className={`text-sm font-medium ${stats?.orderTrendUp ? 'text-emerald-500' : 'text-red-500'}`}>
+                        <i className={`fas ${stats?.orderTrendUp ? 'fa-arrow-up' : 'fa-arrow-down'} mr-1`}></i> 
+                        {stats?.orderTrend || '0%'} <span className="text-gray-400 font-normal ml-1">tháng này</span>
                     </p>
                 </div>
 
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <p className="text-gray-500 text-sm font-medium mb-2">Doanh thu thực tế (Đã giao)</p>
-                    <h3 className="text-3xl font-bold text-gray-900 mb-4">{formatMoney(stats.totalRevenue)}</h3>
-                    <p className={`text-sm font-medium ${stats.revenueTrendUp ? 'text-emerald-500' : 'text-red-500'}`}>
-                        <i className={`fas ${stats.revenueTrendUp ? 'fa-arrow-up' : 'fa-arrow-down'} mr-1`}></i> 
-                        {stats.revenueTrend} <span className="text-gray-400 font-normal ml-1">tháng này</span>
+                    <h3 className="text-3xl font-bold text-gray-900 mb-4">{formatMoney(stats?.totalRevenue)}</h3>
+                    <p className={`text-sm font-medium ${stats?.revenueTrendUp ? 'text-emerald-500' : 'text-red-500'}`}>
+                        <i className={`fas ${stats?.revenueTrendUp ? 'fa-arrow-up' : 'fa-arrow-down'} mr-1`}></i> 
+                        {stats?.revenueTrend || '0%'} <span className="text-gray-400 font-normal ml-1">tháng này</span>
                     </p>
                 </div>
 
@@ -176,10 +176,10 @@ const AdminDashboard = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100">
-                                    {recentOrders?.length === 0 ? (
+                                    {!recentOrders || recentOrders.length === 0 ? (
                                         <tr><td colSpan="4" className="text-center py-6 text-gray-400">Chưa có đơn hàng nào</td></tr>
                                     ) : (
-                                        recentOrders?.map((order, index) => (
+                                        recentOrders.map((order, index) => (
                                             <tr key={index} className="hover:bg-gray-50 transition">
                                                 <td className="px-6 py-4 text-gray-800 font-bold">#{order.orderCode}</td>
                                                 <td className="px-6 py-4 text-gray-600 font-medium">{order.customer}</td>
@@ -202,10 +202,10 @@ const AdminDashboard = () => {
                         <h3 className="font-bold text-lg text-gray-800">Sản phẩm bán chạy nhất</h3>
                     </div>
                     <div className="p-6 space-y-6">
-                        {topProducts?.length === 0 ? (
+                        {!topProducts || topProducts.length === 0 ? (
                             <p className="text-center text-gray-400">Chưa có dữ liệu bán hàng</p>
                         ) : (
-                            topProducts?.map((product, index) => (
+                            topProducts.map((product, index) => (
                                 <div key={index} className="flex items-center group">
                                     <img 
                                         src={product.image || 'https://placehold.co/100'} 

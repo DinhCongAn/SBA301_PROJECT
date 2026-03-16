@@ -105,7 +105,7 @@ const Checkout = () => {
             window.dispatchEvent(new Event('cartUpdated'));
             alert(res.data.message);
             // Thành công -> Đá về trang lịch sử đơn hàng hoặc trang chủ
-            navigate('/'); 
+            navigate('/orders'); 
         } catch (error) {
             alert(error.response?.data || "Đã xảy ra lỗi khi đặt hàng!");
             setIsPlacingOrder(false);
