@@ -1,6 +1,7 @@
 import React from "react";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import GenericError from './pages/errors/GenericError'; 
 
 // --- BẢO VỆ ROUTE ---
 import AdminRoute from "./components/AdminRoute";
@@ -55,6 +56,8 @@ function App() {
                 <Route path="cart" element={<Cart />} />
                 <Route path="checkout" element={<Checkout />} />
                 <Route path="orders" element={<Orders />} />
+                <Route path="/error/:code" element={<GenericError />} />
+                <Route path="*" element={<GenericError defaultCode="404" />} />
             </Route>
 
 
