@@ -30,10 +30,12 @@ const AdminLayout = () => {
             {/* ========================================== */}
             <aside className="w-64 bg-[#111827] flex flex-col h-full shadow-2xl z-20 flex-shrink-0">
                 {/* Logo */}
+                <Link to="/">
                 <div className="h-16 flex items-center px-6 bg-[#030712] border-b border-gray-800">
                     <i className="fas fa-shopping-basket text-emerald-500 text-2xl mr-3"></i>
-                    <span className="font-bold text-xl text-white tracking-wide">Admin Panel</span>
+                    <span className="font-bold text-xl text-white tracking-wide">Trang Chủ</span>
                 </div>
+                </Link>
 
                 {/* Navigation Links */}
                 <nav className="flex-1 py-6 overflow-y-auto px-4 custom-scrollbar">
