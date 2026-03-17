@@ -30,6 +30,7 @@ import CategoryManagement from "./pages/admin/CategoryManagement";
 import PromotionManagement from "./pages/admin/PromotionManagement";
 import UserManagement from "./pages/admin/UserManagement";
 import SliderManagement from "./pages/admin/SliderManagement";
+import ReviewManagement from "./pages/admin/ReviewManagement";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -71,6 +72,7 @@ function App() {
                     <Route path="promotions" element={<PromotionManagement />} />
                     <Route path="users" element={<UserManagement />} />
                     <Route path="sliders" element={<SliderManagement />} />
+                    <Route path="reviews" element={<ReviewManagement />} />
                 </Route>
             </Route>
 

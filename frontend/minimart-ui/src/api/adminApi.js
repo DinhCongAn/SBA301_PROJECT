@@ -73,3 +73,15 @@ export const fetchAdminSliders = (search = '', status = 'ALL') => {
 };
 export const saveAdminSlider = (data) => axiosClient.post(`/admin/sliders`, data);
 export const deleteAdminSlider = (id) => axiosClient.delete(`/admin/sliders/${id}`);
+
+// ==========================================
+// 7. QUẢN LÝ ĐÁNH GIÁ (REVIEWS)
+// ==========================================
+export const fetchAdminReviews = (page = 0, size = 10, search = '', rating = '') => {
+    let url = `/admin/reviews?page=${page}&size=${size}`;
+    if (search) url += `&search=${encodeURIComponent(search)}`;
+    if (rating) url += `&rating=${rating}`;
+    return axiosClient.get(url);
+};
+
+export const deleteAdminReview = (id) => axiosClient.delete(`/admin/reviews/${id}`);
