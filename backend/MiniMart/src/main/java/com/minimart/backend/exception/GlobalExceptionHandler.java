@@ -27,7 +27,6 @@ public class GlobalExceptionHandler {
     // 3. Bắt lỗi 500 (Lỗi Server sập, NullPointer, Database...)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGlobalException(Exception e) {
-        // Ghi log ra console để Dev sửa
         e.printStackTrace();
         return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Hệ thống gặp sự cố. Vui lòng thử lại sau!");
     }
