@@ -22,6 +22,7 @@ import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
+import PageViewer from "./pages/PageViewer";
 
 // --- ADMIN PAGES ---
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -56,6 +57,7 @@ function App() {
                 <Route path="cart" element={<Cart />} />
                 <Route path="checkout" element={<Checkout />} />
                 <Route path="orders" element={<Orders />} />
+                <Route path="/page/:slug" element={<PageViewer />} />
                 <Route path="/error/:code" element={<GenericError />} />
                 <Route path="*" element={<GenericError defaultCode="404" />} />
             </Route>
