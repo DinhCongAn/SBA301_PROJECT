@@ -30,17 +30,21 @@ cd backend
 mvn clean install
 mvn spring-boot:run
 # Server runs on http://localhost:8080
-3. Frontend (ReactJS)
-Bash
+```
+
+### 3. Frontend (ReactJS)
+```bash
 cd frontend
 npm install
 npm run dev
 # App runs on http://localhost:5173
-👨‍💻 Author
-Đinh Công An
+```
 
-Major: Software Engineering
+---
 
-University: FPT University Hanoi
+## 👨‍💻 Author
 
-Expected Graduation: December 2026
+**Đinh Công An**
+* **Major:** Software Engineering
+* **University:** FPT University Hanoi
+* **Expected Graduation:** December 2026
