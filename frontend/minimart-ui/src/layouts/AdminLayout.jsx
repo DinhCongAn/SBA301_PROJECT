@@ -130,10 +130,7 @@ const AdminLayout = () => {
                     <Link to="/admin/reviews" className={`flex items-center px-4 py-3 mb-1 ${checkActive('/admin/reviews')}`}>
                         <i className="fas fa-star w-6 text-lg"></i> <span className="font-medium">Reviews</span>
                     </Link>
-                    <Link to="/admin/logs" className={`flex items-center px-4 py-3 mb-1 ${checkActive('/admin/logs')}`}>
-                        <i className="fas fa-terminal w-6 text-lg text-red-400"></i> <span className="font-medium text-red-400">System Logs</span>
-                    </Link>
-
+                
                     <p className="px-4 text-xs font-bold text-gray-500 uppercase tracking-widest mt-6 mb-3">Hệ thống</p>
                     
                     <Link to="/admin/promotions" className={`flex items-center px-4 py-3 mb-1 ${checkActive('/admin/promotions')}`}>

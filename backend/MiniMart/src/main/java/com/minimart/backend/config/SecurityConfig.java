@@ -51,7 +51,8 @@ public class SecurityConfig {
                                 "/api/products/**",   // Xem danh sách/chi tiết sản phẩm
                                 "/api/categories/**", // Xem danh mục
                                 "/api/sliders/**",    // Xem banner/slider
-                                "/api/home/**",       // Dữ liệu trang chủ
+                                "/api/home/**",
+                                "/api/ai/**",
                                 "/ws/**",             // Kênh kết nối WebSocket (Thông báo Real-time)
                                 "/error/**"           // Cho phép điều hướng đến các trang xử lý lỗi
                         ).permitAll()
