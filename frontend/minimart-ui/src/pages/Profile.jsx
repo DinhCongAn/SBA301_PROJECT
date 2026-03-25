@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { updateProfileApi, changePasswordApi } from '../api/userApi';
+import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
+import PasswordInput from '../components/PasswordInput';
+import { validatePasswordStrength } from '../utils/passwordValidation';
 
 const Profile = () => {
     const user = JSON.parse(localStorage.getItem('user')) || {};
@@ -41,7 +44,11 @@ const Profile = () => {
 
     const submitPassword = async (e) => {
         e.preventDefault();
-        if (passwords.newPassword.length < 6) return setMessage({ text: 'Mật khẩu phải từ 6 ký tự!', type: 'error' });
+        
+        // Validate new password strength
+        const { isValid } = validatePasswordStrength(passwords.newPassword);
+        if (!isValid) return setMessage({ text: 'Mật khẩu không đủ mạnh. Vui lòng kiểm tra các yêu cầu.', type: 'error' });
+        
         if (passwords.newPassword !== passwords.confirmPassword) return setMessage({ text: 'Xác nhận mật khẩu không khớp!', type: 'error' });
 
         try {
@@ -119,20 +126,34 @@ const Profile = () => {
 
                             {/* Nếu bắt buộc nhập mật khẩu cũ thì mới hiện ô này */}
                             {needsOldPassword && (
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Mật khẩu hiện tại</label>
-                                    <input type="password" name="oldPassword" required value={passwords.oldPassword} onChange={handlePassChange} className="w-full border-gray-300 rounded-lg p-2.5 focus:ring-emerald-500 focus:border-emerald-500" placeholder="Nhập mật khẩu hiện tại" />
-                                </div>
+                                <PasswordInput
+                                    name="oldPassword"
+                                    value={passwords.oldPassword}
+                                    onChange={handlePassChange}
+                                    label="Mật khẩu hiện tại"
+                                    placeholder="Nhập mật khẩu hiện tại"
+                                    required
+                                />
                             )}
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Mật khẩu mới</label>
-                                <input type="password" name="newPassword" required minLength="6" value={passwords.newPassword} onChange={handlePassChange} className="w-full border-gray-300 rounded-lg p-2.5 focus:ring-emerald-500 focus:border-emerald-500" placeholder="Ít nhất 6 ký tự" />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Xác nhận mật khẩu mới</label>
-                                <input type="password" name="confirmPassword" required minLength="6" value={passwords.confirmPassword} onChange={handlePassChange} className="w-full border-gray-300 rounded-lg p-2.5 focus:ring-emerald-500 focus:border-emerald-500" placeholder="Nhập lại mật khẩu mới" />
-                            </div>
+                            <PasswordInput
+                                name="newPassword"
+                                value={passwords.newPassword}
+                                onChange={handlePassChange}
+                                label="Mật khẩu mới"
+                                placeholder="Ít nhất 8 ký tự"
+                                required
+                            />
+                            <PasswordStrengthMeter password={passwords.newPassword} />
+
+                            <PasswordInput
+                                name="confirmPassword"
+                                value={passwords.confirmPassword}
+                                onChange={handlePassChange}
+                                label="Xác nhận mật khẩu mới"
+                                placeholder="Nhập lại mật khẩu mới"
+                                required
+                            />
                             
                             <button type="submit" className="bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold hover:bg-emerald-600 transition shadow-sm w-full mt-4">
                                 {needsOldPassword ? 'Cập nhật mật khẩu' : 'Thiết lập mật khẩu'}

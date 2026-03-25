@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginApi, googleLoginApi } from '../api/authApi';
 import { GoogleLogin } from '@react-oauth/google';
+import PasswordInput from '../components/PasswordInput';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -56,10 +57,14 @@ const Login = () => {
                         <label className="block text-sm font-medium text-gray-700">Tên đăng nhập</label>
                         <input type="text" value={username} onChange={(e)=>setUsername(e.target.value)} className="mt-1 block w-full border border-gray-300 rounded-lg py-2.5 px-3 focus:ring-emerald-500 focus:border-emerald-500" />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Mật khẩu</label>
-                        <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} className="mt-1 block w-full border border-gray-300 rounded-lg py-2.5 px-3 focus:ring-emerald-500 focus:border-emerald-500" />
-                    </div>
+                    <PasswordInput 
+                        name="password" 
+                        value={password} 
+                        onChange={(e)=>setPassword(e.target.value)} 
+                        label="Mật khẩu" 
+                        placeholder="Nhập mật khẩu" 
+                        required 
+                    />
                     <div className="flex items-center justify-between">
                         <label className="flex items-center text-sm text-gray-900"><input type="checkbox" className="mr-2 text-emerald-600 rounded"/> Ghi nhớ</label>
                         <Link to="/forgot-password" className="text-sm font-medium text-emerald-600 hover:text-emerald-500">Quên mật khẩu?</Link>

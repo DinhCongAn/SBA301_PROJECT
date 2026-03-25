@@ -26,6 +26,7 @@ axiosClient.interceptors.response.use(
   },
   (error) => {
     const status = error.response ? error.response.status : null;
+    const user = JSON.parse(localStorage.getItem('user'));
 
     if (!status) {
         window.location.href = '/error/503';
@@ -33,8 +34,12 @@ axiosClient.interceptors.response.use(
     }
 
     if (status === 401 || status === 403) {
-        localStorage.removeItem('user');
-        window.location.href = '/';
+        // Chỉ redirect nếu user đã có token (token hết hạn)
+        // Nếu chưa có token (đang ở trang login), return error để form xử lý
+        if (user && user.token) {
+            localStorage.removeItem('user');
+            window.location.href = '/';
+        }
         return Promise.reject(error);
     }
 

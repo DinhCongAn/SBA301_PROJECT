@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerApi } from '../api/authApi';
+import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
+import PasswordInput from '../components/PasswordInput';
+import { validatePasswordStrength } from '../utils/passwordValidation';
 
 const Register = () => {
     const [formData, setFormData] = useState({ fullName: '', username: '', email: '', phone: '', password: '', confirmPassword: '' });
@@ -12,7 +15,9 @@ const Register = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         if (formData.password !== formData.confirmPassword) return setError('Mật khẩu không khớp!');
-        if (formData.password.length < 6) return setError('Mật khẩu > 6 ký tự!');
+        
+        const { isValid } = validatePasswordStrength(formData.password);
+        if (!isValid) return setError('Mật khẩu không đủ mạnh. Vui lòng kiểm tra các yêu cầu ở dưới.');
         
         try {
             await registerApi(formData);
@@ -38,9 +43,24 @@ const Register = () => {
                         <div><label className="block text-sm text-gray-700">SĐT</label><input type="text" name="phone" onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-3" /></div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
-                        <div><label className="block text-sm text-gray-700">Mật khẩu</label><input type="password" required name="password" onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-3" /></div>
-                        <div><label className="block text-sm text-gray-700">Xác nhận MK</label><input type="password" required name="confirmPassword" onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-3" /></div>
+                        <PasswordInput 
+                            name="password" 
+                            value={formData.password} 
+                            onChange={handleChange} 
+                            label="Mật khẩu" 
+                            placeholder="Ít nhất 8 ký tự" 
+                            required 
+                        />
+                        <PasswordInput 
+                            name="confirmPassword" 
+                            value={formData.confirmPassword} 
+                            onChange={handleChange} 
+                            label="Xác nhận mật khẩu" 
+                            placeholder="Nhập lại mật khẩu" 
+                            required 
+                        />
                     </div>
+                    <PasswordStrengthMeter password={formData.password} />
                     <button type="submit" className="w-full py-3 mt-6 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-emerald-500 hover:bg-emerald-600">Đăng ký</button>
                 </form>
                 <div className="mt-6 text-center text-sm text-gray-600">Đã có tài khoản? <Link to="/login" className="font-bold text-emerald-600">Đăng nhập</Link></div>
