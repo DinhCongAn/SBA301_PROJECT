@@ -12,7 +12,7 @@ const Home = () => {
 
     // State quản lý Phân trang Sản phẩm
     const [productPage, setProductPage] = useState(0);
-    const PRODUCTS_PER_PAGE = 8; // Số sản phẩm hiển thị trên 1 trang
+    const PRODUCTS_PER_PAGE = 16; // Số sản phẩm hiển thị trên 1 trang
 
     // Lấy dữ liệu từ Backend
     useEffect(() => {

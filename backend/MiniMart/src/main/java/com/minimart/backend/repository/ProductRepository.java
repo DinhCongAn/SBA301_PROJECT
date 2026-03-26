@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findTop16ByStatusOrderByProductIdDesc(String status);
+    List<Product> findTop30ByStatusOrderByProductIdDesc(String status);
 
     @Query(value = "SELECT * FROM Products WHERE status = 'active' " +
             "AND (:keyword IS NULL OR name COLLATE SQL_Latin1_General_CP1_CI_AI LIKE '%' + :keyword + '%') " +
