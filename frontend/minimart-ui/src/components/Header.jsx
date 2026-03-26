@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getCart } from '../api/cartApi';
+import { fetchCategories } from '../api/productApi';
 
 // Thêm thư viện WebSocket và Toastify
 import SockJS from 'sockjs-client';
@@ -13,6 +14,39 @@ const Header = () => {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user'));
     const [cartCount, setCartCount] = useState(0);
+
+    // ========================================================
+    // QUẢN LÝ DANH MỤC (CATEGORIES DROPDOWN)
+    // ========================================================
+    const [categories, setCategories] = useState([]);
+    const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
+    const categoryDropdownRef = useRef(null);
+
+    // Tải danh sách danh mục
+    useEffect(() => {
+        const loadCategories = async () => {
+            const cats = await fetchCategories();
+            setCategories(cats);
+        };
+        loadCategories();
+    }, []);
+
+    // Đóng dropdown khi click ra ngoài
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (categoryDropdownRef.current && !categoryDropdownRef.current.contains(event.target)) {
+                setIsCategoryDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // Xử lý khi click vào danh mục
+    const handleCategoryClick = (categoryId) => {
+        navigate(`/products?category=${categoryId}`);
+        setIsCategoryDropdownOpen(false);
+    };
 
     // ========================================================
     // QUẢN LÝ THÔNG BÁO (NOTIFICATIONS)
@@ -51,10 +85,10 @@ const Header = () => {
 
             stompClient.onConnect = () => {
                 console.log(`✅ User ${user.user_id} đã kết nối Trạm thông báo!`);
-                
+
                 // Lắng nghe kênh của User
                 stompClient.subscribe(`/topic/user/${user.user_id}/notifications`, (message) => {
-                    
+
                     // =========================================================
                     // 🚨 ĐOẠN CODE TEST: BẮT QUẢ TANG TIN NHẮN TỪ BACKEND
                     // =========================================================
@@ -85,7 +119,7 @@ const Header = () => {
                             return updatedNotis;
                         });
                         setUnreadNotiCount(prev => prev + 1);
-                        
+
                     } catch (error) {
                         console.error("❌ LỖI NGHIÊM TRỌNG: Backend gửi về nhưng không parse JSON được!");
                         console.error("Chi tiết lỗi:", error);
@@ -135,9 +169,9 @@ const Header = () => {
         setNotifications(updatedNotis);
         setUnreadNotiCount(updatedNotis.filter(n => !n.isRead).length);
         localStorage.setItem(`notis_${user.user_id}`, JSON.stringify(updatedNotis));
-        
+
         setIsNotiOpen(false);
-        navigate('/orders'); 
+        navigate('/orders');
     };
 
     const markAllAsRead = () => {
@@ -191,7 +225,7 @@ const Header = () => {
     };
 
     const handleLogout = () => {
-        if(window.confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+        if (window.confirm('Bạn có chắc chắn muốn đăng xuất?')) {
             localStorage.removeItem('user');
             setCartCount(0);
             navigate('/');
@@ -208,19 +242,19 @@ const Header = () => {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 items-center">
-                    
+
                     {/* LOGO */}
                     <Link to="/" className="flex items-center cursor-pointer">
                         <i className="fas fa-shopping-basket text-emerald-500 text-2xl mr-2"></i>
                         <span className="font-bold text-xl tracking-tight text-gray-900">MiniMart</span>
                     </Link>
-                    
+
                     {/* TÌM KIẾM */}
                     <div className="flex-1 max-w-2xl px-8 hidden md:block">
                         <div className="relative">
-                            <input 
-                                type="text" 
-                                placeholder="Tìm kiếm sản phẩm..." 
+                            <input
+                                type="text"
+                                placeholder="Tìm kiếm sản phẩm..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 onKeyDown={handleSearch}
@@ -229,11 +263,62 @@ const Header = () => {
                             <i className="fas fa-search absolute left-4 top-3 text-gray-400"></i>
                         </div>
                     </div>
-                    
+
                     {/* MENU PHẢI */}
                     <div className="flex items-center space-x-5 sm:space-x-6">
+                        {/* DROPDOWN DANH MỤC */}
+                        <div
+                            className="relative py-4" /* Thêm padding (py-4) để tạo vùng đệm hover an toàn, giúp chuột không bị trượt ra ngoài khi di chuyển xuống menu */
+                            ref={categoryDropdownRef}
+                            onMouseEnter={() => setIsCategoryDropdownOpen(true)}
+                            onMouseLeave={() => setIsCategoryDropdownOpen(false)}
+                        >
+                            <button
+                                onClick={() => navigate('/products')} /* Đổi thành chuyển hướng luôn, vì giờ đã dùng hover để mở menu */
+                                className="text-gray-600 hover:text-emerald-600 font-medium hidden md:flex items-center gap-1 hover:bg-emerald-50 px-3 py-1 rounded transition-colors"
+                            >
+                                <i className="fas fa-th-large text-sm"></i>
+                                Danh mục
+                                <i className={`fas fa-chevron-down text-xs transition-transform ${isCategoryDropdownOpen ? 'rotate-180' : ''}`}></i>
+                            </button>
+
+                            {isCategoryDropdownOpen && (
+                                /* Thêm top-10 hoặc điều chỉnh mt-* để menu không bị đè lên vùng padding của nút */
+                                <div className="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50 animate-fade-in-down">
+                                    <div className="max-h-96 overflow-y-auto custom-scrollbar">
+                                        <button
+                                            onClick={() => {
+                                                navigate('/products');
+                                                setIsCategoryDropdownOpen(false);
+                                            }}
+                                            className="w-full text-left px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition-colors border-b border-gray-100 font-medium"
+                                        >
+                                            <i className="fas fa-th text-sm mr-2.5"></i>
+                                            Tất cả sản phẩm
+                                        </button>
+                                        {categories.length > 0 ? (
+                                            categories.map((cat) => (
+                                                <button
+                                                    key={cat.categoryId}
+                                                    onClick={() => handleCategoryClick(cat.categoryId)}
+                                                    className="w-full text-left px-4 py-2.5 text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition-colors flex items-center gap-2"
+                                                >
+                                                    <i className="fas fa-folder text-xs text-emerald-500"></i>
+                                                    {cat.name}
+                                                </button>
+                                            ))
+                                        ) : (
+                                            <div className="px-4 py-3 text-center text-gray-500 text-sm">
+                                                Đang tải danh mục...
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
                         <Link to="/products" className="text-gray-600 hover:text-emerald-600 font-medium hidden md:block">Sản phẩm</Link>
-                        
+
                         {user && user.role === 'ADMIN' && (
                             <Link to="/admin" className="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-lg font-bold hover:bg-emerald-100 transition border border-emerald-200 hidden md:flex">
                                 <i className="fas fa-user-shield"></i> Quản trị
@@ -243,7 +328,7 @@ const Header = () => {
                         {/* CHUÔNG THÔNG BÁO */}
                         {user && (
                             <div className="relative" ref={notiDropdownRef}>
-                                <button 
+                                <button
                                     onClick={() => setIsNotiOpen(!isNotiOpen)}
                                     className="relative text-gray-600 hover:text-blue-500 focus:outline-none p-1 mt-1"
                                 >
@@ -272,8 +357,8 @@ const Header = () => {
                                             ) : (
                                                 <div className="divide-y divide-gray-50">
                                                     {notifications.map((noti) => (
-                                                        <div 
-                                                            key={noti.id} 
+                                                        <div
+                                                            key={noti.id}
                                                             onClick={() => handleNotiClick(noti)}
                                                             className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors flex gap-3 ${!noti.isRead ? 'bg-blue-50/30' : ''}`}
                                                         >
@@ -301,29 +386,29 @@ const Header = () => {
                         {/* GIỎ HÀNG */}
                         <div onClick={handleCartClick} className="relative cursor-pointer text-gray-600 hover:text-emerald-600 p-1 mt-1">
                             <i className="fas fa-shopping-cart text-xl"></i>
-                            {user && cartCount > 0 && ( 
+                            {user && cartCount > 0 && (
                                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold border-2 border-white">
                                     {cartCount > 99 ? '99+' : cartCount}
                                 </span>
                             )}
                         </div>
-                        
+
                         {/* USER DROP DOWN */}
                         {user ? (
                             <div className="relative group cursor-pointer py-4">
                                 <div className="flex items-center space-x-2 text-gray-600 hover:text-emerald-600">
-                                 {user.avatar_url ? (
-                                   <img src={user.avatar_url} alt="avatar" className="w-8 h-8 rounded-full object-cover border border-gray-200 shadow-sm" />
-                                 ) : (
-                                   <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold uppercase">
-                                     {user.full_name ? user.full_name.charAt(0) : 'U'}
-                                   </div>
-                                 )}
+                                    {user.avatar_url ? (
+                                        <img src={user.avatar_url} alt="avatar" className="w-8 h-8 rounded-full object-cover border border-gray-200 shadow-sm" />
+                                    ) : (
+                                        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold uppercase">
+                                            {user.full_name ? user.full_name.charAt(0) : 'U'}
+                                        </div>
+                                    )}
                                     <span className="hidden md:block font-medium text-sm truncate max-w-[100px]">
                                         {user.full_name || user.username}
                                     </span>
                                 </div>
-                                
+
                                 <div className="absolute right-0 top-12 w-48 mt-1 py-2 bg-white rounded-lg shadow-xl hidden group-hover:block border border-gray-100 transition-opacity">
                                     <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         <i className="fas fa-user-circle mr-2 w-4 text-emerald-500"></i> Hồ sơ cá nhân

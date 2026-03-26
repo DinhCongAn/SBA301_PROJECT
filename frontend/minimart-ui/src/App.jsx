@@ -23,6 +23,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
 import PageViewer from "./pages/PageViewer";
+import ArticleDetail from "./pages/ArticleDetail";
 
 // --- ADMIN PAGES ---
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -54,6 +55,7 @@ function App() {
                 <Route path="profile" element={<Profile />} />
                 <Route path="address" element={<AddressManagement />} />
                 <Route path="product/:id" element={<ProductDetail />} />
+                <Route path="article/:id" element={<ArticleDetail />} />
                 <Route path="cart" element={<Cart />} />
                 <Route path="checkout" element={<Checkout />} />
                 <Route path="orders" element={<Orders />} />
