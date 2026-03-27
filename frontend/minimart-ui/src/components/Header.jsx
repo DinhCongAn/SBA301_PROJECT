@@ -89,9 +89,6 @@ const Header = () => {
                 // Lắng nghe kênh của User
                 stompClient.subscribe(`/topic/user/${user.user_id}/notifications`, (message) => {
 
-                    // =========================================================
-                    // 🚨 ĐOẠN CODE TEST: BẮT QUẢ TANG TIN NHẮN TỪ BACKEND
-                    // =========================================================
                     console.log("=========================================");
                     console.log("🚨 CÓ TIN TING TING TỪ BACKEND GỬI VỀ!");
                     console.log("1. Dữ liệu thô (Raw Message):", message);

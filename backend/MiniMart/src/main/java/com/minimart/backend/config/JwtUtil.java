@@ -12,7 +12,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // Khóa bí mật ký Token (Khuyến nghị sau này nên chuyển vào file application.properties)
+    // Khóa bí mật ký Token
     private static final String SECRET_KEY_STRING = "MiniMartSecureKey2026ForJwtAuthenticationXYZ123!";
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY_STRING.getBytes());
 
